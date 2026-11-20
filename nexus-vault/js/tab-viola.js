@@ -3972,6 +3972,389 @@ const DEFAULT_IMPROV_STUDIO_STATE = {
     ]
 };
 
+// =========================================================================
+// FASE 22: LABORATÓRIO DE TÉCNICAS EXPRESSIVAS CAIPIRAS & BIOMECÂNICA DE MÃO
+// =========================================================================
+const EXPRESSIVE_TECHNIQUES_CATALOG = {
+    hammer_on: {
+        id: 'hammer_on',
+        symbol: 'H',
+        name: 'Hammer-On (Ligado ↑)',
+        shortName: 'Hammer-On',
+        badge: 'Ligado Ascendente',
+        color: '#10b981',
+        pillClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40',
+        tabPrefix: 'h',
+        shortRule: 'Palhete a nota base e martele a casa superior com aceleração rápida da ponta do dedo, sem novo toque na boca.',
+        angleDeg: 80,
+        forceLabel: 'Impulso Axial Perpendicular (Fₙ)',
+        tensionPct: 38,
+        riskLabel: 'Baixo–Moderado',
+        biomech: {
+            leftHanded: {
+                frettingHand: 'Mão Direita (Escala)',
+                pickingHand: 'Mão Esquerda (Boca)',
+                frettingCue: 'Arqueie a falange distal da mão direita (~80°); o golpe cai firme 3 mm atrás do traste metálico.',
+                pickingCue: 'Ataque apenas a primeira nota com o polegar ou indicador esquerdo e mantenha o pulso relaxado.',
+                postureAlert: 'Não aperte o polegar atrás do braço para compensar: a clareza vem da velocidade do golpe do dedo.'
+            },
+            rightHanded: {
+                frettingHand: 'Mão Esquerda (Escala)',
+                pickingHand: 'Mão Direita (Boca)',
+                frettingCue: 'Arqueie a falange distal da mão esquerda (~80°); o golpe cai firme 3 mm atrás do traste metálico.',
+                pickingCue: 'Ataque apenas a primeira nota com o polegar ou indicador direito e mantenha o pulso relaxado.',
+                postureAlert: 'Não aperte o polegar atrás do braço para compensar: a clareza vem da velocidade do golpe do dedo.'
+            }
+        }
+    },
+    pull_off: {
+        id: 'pull_off',
+        symbol: 'P',
+        name: 'Pull-Off (Ligado ↓)',
+        shortName: 'Pull-Off',
+        badge: 'Ligado Descendente',
+        color: '#06b6d4',
+        pillClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40',
+        tabPrefix: 'p',
+        shortRule: 'Pressione ambas as casas (quando não for para corda solta) e puxe levemente a corda para baixo ao soltar o dedo superior.',
+        angleDeg: 45,
+        forceLabel: 'Tração Oblíqua Controlada (Fₙ + Fₜ)',
+        tensionPct: 44,
+        riskLabel: 'Moderado',
+        biomech: {
+            leftHanded: {
+                frettingHand: 'Mão Direita (Escala)',
+                pickingHand: 'Mão Esquerda (Boca)',
+                frettingCue: 'Ancore o dedo de destino antes do movimento; o dedo superior realiza micro-beliscão descendente de 3 mm.',
+                pickingCue: 'Palhete a nota aguda com apoio controlado; em cordas oitavadas da viola, garanta que os 2 fios soem juntos.',
+                postureAlert: 'Evite puxar puxando o cotovelo: o movimento nasce exclusivamente nos flexores do dedo.'
+            },
+            rightHanded: {
+                frettingHand: 'Mão Esquerda (Escala)',
+                pickingHand: 'Mão Direita (Boca)',
+                frettingCue: 'Ancore o dedo de destino antes do movimento; o dedo superior realiza micro-beliscão descendente de 3 mm.',
+                pickingCue: 'Palhete a nota aguda com apoio controlado; em cordas oitavadas da viola, garanta que os 2 fios soem juntos.',
+                postureAlert: 'Evite puxar movendo o cotovelo: o movimento nasce exclusivamente nos flexores do dedo.'
+            }
+        }
+    },
+    slide: {
+        id: 'slide',
+        symbol: 'S',
+        name: 'Slide Contínuo (Arraste)',
+        shortName: 'Slide /',
+        badge: 'Glissando Caipira',
+        color: '#f59e0b',
+        pillClass: 'bg-amber-500/15 text-amber-300 border-amber-500/40',
+        tabPrefix: '/',
+        shortRule: 'Mantenha pressão leve e constante contra a escala enquanto o conjunto mão-braço desliza até a casa alvo.',
+        angleDeg: 18,
+        forceLabel: 'Deslizamento Tangencial Uniforme (Fₜ)',
+        tensionPct: 32,
+        riskLabel: 'Baixo',
+        biomech: {
+            leftHanded: {
+                frettingHand: 'Mão Direita (Escala)',
+                pickingHand: 'Mão Esquerda (Boca)',
+                frettingCue: 'Olhe para o traste de destino antes de partir; alivie 25% da pinça do polegar para deslizar sem travar.',
+                pickingCue: 'Ataque limpo na saída; em arrastes em sextas ou terças, pince os dois pares simultaneamente.',
+                postureAlert: 'O antebraço conduz o movimento junto com o polegar direito — nunca deixe o polegar preso para trás.'
+            },
+            rightHanded: {
+                frettingHand: 'Mão Esquerda (Escala)',
+                pickingHand: 'Mão Direita (Boca)',
+                frettingCue: 'Olhe para o traste de destino antes de partir; alivie 25% da pinça do polegar para deslizar sem travar.',
+                pickingCue: 'Ataque limpo na saída; em arrastes em sextas ou terças, pince os dois pares simultaneamente.',
+                postureAlert: 'O antebraço conduz o movimento junto com o polegar esquerdo — nunca deixe o polegar preso para trás.'
+            }
+        }
+    },
+    trill: {
+        id: 'trill',
+        symbol: 'tr',
+        name: 'Trinado Caipira (Floreio)',
+        shortName: 'Trinado ~',
+        badge: 'Oscilação Rápida',
+        color: '#a855f7',
+        pillClass: 'bg-purple-500/15 text-purple-300 border-purple-500/40',
+        tabPrefix: '~',
+        shortRule: 'Alternância rápida contínua entre Hammer-On e Pull-Off em um único impulso da mão que dedilha.',
+        angleDeg: 75,
+        forceLabel: 'Oscilação Balística Curta (H⇄P)',
+        tensionPct: 68,
+        riskLabel: 'Atenção (Micro-pausas)',
+        biomech: {
+            leftHanded: {
+                frettingHand: 'Mão Direita (Escala)',
+                pickingHand: 'Mão Esquerda (Boca)',
+                frettingCue: 'Mantenha amplitude mínima (5–8 mm acima da corda); ataque com movimento elástico da articulação MCP.',
+                pickingCue: 'Um único ataque firme sustenta todo o trinado; deixe a corda respirar sem abafamento acidental.',
+                postureAlert: 'Carga tendínea elevada: limite treinos de trinado contínuo a ciclos de 20–30 s com soltura de punho.'
+            },
+            rightHanded: {
+                frettingHand: 'Mão Esquerda (Escala)',
+                pickingHand: 'Mão Direita (Boca)',
+                frettingCue: 'Mantenha amplitude mínima (5–8 mm acima da corda); ataque com movimento elástico da articulação MCP.',
+                pickingCue: 'Um único ataque firme sustenta todo o trinado; deixe a corda respirar sem abafamento acidental.',
+                postureAlert: 'Carga tendínea elevada: limite treinos de trinado contínuo a ciclos de 20–30 s com soltura de punho.'
+            }
+        }
+    },
+    art_harmonic: {
+        id: 'art_harmonic',
+        symbol: '◇',
+        name: 'Harmônico Artificial (+12)',
+        shortName: 'Harm. +12',
+        badge: 'Nó Acústico L/2',
+        color: '#38bdf8',
+        pillClass: 'bg-sky-500/15 text-sky-300 border-sky-500/40',
+        tabPrefix: '◇',
+        shortRule: 'Pressione a casa f com a mão de escala, encoste de leve o indicador exatamente em f+12 e pince atrás com polegar/anelar.',
+        angleDeg: 90,
+        forceLabel: 'Toque Nodal Zero-Pressão em L/2',
+        tensionPct: 24,
+        riskLabel: 'Mínimo (Precisão Fina)',
+        biomech: {
+            leftHanded: {
+                frettingHand: 'Mão Direita (Casa f)',
+                pickingHand: 'Mão Esquerda (Nó f+12 + Pinça)',
+                frettingCue: 'Pressione firmemente a casa f para fixar o novo comprimento vibrante L da corda.',
+                pickingCue: 'Indicador esquerdo toca sem apertar exatamente sobre o traste f+12; polegar (ou anelar) pinça 3 cm atrás e solta.',
+                postureAlert: 'Retire o indicador esquerdo no milissegundo após o ataque para não apagar a 2ª parcial cristalina.'
+            },
+            rightHanded: {
+                frettingHand: 'Mão Esquerda (Casa f)',
+                pickingHand: 'Mão Direita (Nó f+12 + Pinça)',
+                frettingCue: 'Pressione firmemente a casa f para fixar o novo comprimento vibrante L da corda.',
+                pickingCue: 'Indicador direito toca sem apertar exatamente sobre o traste f+12; polegar (ou anelar) pinça 3 cm atrás e solta.',
+                postureAlert: 'Retire o indicador direito no milissegundo após o ataque para não apagar a 2ª parcial cristalina.'
+            }
+        }
+    },
+    palm_mute: {
+        id: 'palm_mute',
+        symbol: 'PM',
+        name: 'Abafado de Palma (Palm Mute)',
+        shortName: 'Palm Mute',
+        badge: 'Pizzicato de Bordão',
+        color: '#f43f5e',
+        pillClass: 'bg-rose-500/15 text-rose-300 border-rose-500/40',
+        tabPrefix: 'pm',
+        shortRule: 'Repouse a borda hipotenar da palma suavemente sobre o rastilho para abafar os harmônicos agudos e destacar o pulso.',
+        angleDeg: 12,
+        forceLabel: 'Amortecimento Hipotenar no Rastilho',
+        tensionPct: 28,
+        riskLabel: 'Mínimo',
+        biomech: {
+            leftHanded: {
+                frettingHand: 'Mão Direita (Escala)',
+                pickingHand: 'Mão Esquerda (Sobre Rastilho)',
+                frettingCue: 'Digitação normal nos bordões e primas; mantenha firmeza limpa para a fundamental soar definida.',
+                pickingCue: 'Encoste a lateral externa da palma esquerda bem na linha do rastilho de osso enquanto o polegar pulsa.',
+                postureAlert: 'Mantenha o punho esquerdo em alinhamento neutro, sem dobrar lateralmente para fora.'
+            },
+            rightHanded: {
+                frettingHand: 'Mão Esquerda (Escala)',
+                pickingHand: 'Mão Direita (Sobre Rastilho)',
+                frettingCue: 'Digitação normal nos bordões e primas; mantenha firmeza limpa para a fundamental soar definida.',
+                pickingCue: 'Encoste a lateral externa da palma direita bem na linha do rastilho de osso enquanto o polegar pulsa.',
+                postureAlert: 'Mantenha o punho direito em alinhamento neutro, sem dobrar lateralmente para fora.'
+            }
+        }
+    }
+};
+
+const EXPRESSIVE_EXERCISES_CATALOG = [
+    {
+        id: 'ex_ligado_tercas_cebolao',
+        title: 'Escalada de Hammer-On em Terças & Bordão',
+        level: 'Nível 1 • Fundamentos',
+        primaryTech: 'hammer_on',
+        timeSignature: '2/4',
+        defaultBpm: 84,
+        badge: 'Hammer-On',
+        description: 'Construção de força elástica sem tensão: marteladas ascendentes partindo das cordas soltas nos pares 1, 2 e bordão 4.',
+        biomechFocus: 'Ataque perpendicular com a ponta da falange distal logo atrás do traste.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 0, from: 0, to: 2 }], rh: 'H', lh: '0h2', ann: 'Hammer-on 0→2 na Prima' },
+            { measure: 1, beat: '1e', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 0, from: 2, to: 4 }], rh: 'H', lh: '2h4', ann: 'Hammer-on 2→4 na Prima' },
+            { measure: 1, beat: '2', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 1, from: 0, to: 2 }], rh: 'H', lh: '0h2', ann: 'Hammer-on 0→2 na Segundinha' },
+            { measure: 1, beat: '2e', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 1, from: 2, to: 4 }], rh: 'H', lh: '2h4', ann: 'Hammer-on 2→4 na Segundinha' },
+            { measure: 2, beat: '1', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 2, from: 0, to: 1 }], rh: 'H', lh: '0h1', ann: 'Ligado na Turina (0→1)' },
+            { measure: 2, beat: '1e', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 3, from: 0, to: 2 }], rh: 'H', lh: '0h2', ann: 'Ligado no Bordão Toeira (0→2)' },
+            { measure: 2, beat: '2', durationBeats: 1.0, tech: 'open', pairs: [{ c: 0, from: 0, to: 0 }, { c: 1, from: 0, to: 0 }, { c: 3, from: 0, to: 0 }], rh: 'p+i', lh: '0-0-0', ann: 'Repouso em acorde solto aberto' }
+        ]
+    },
+    {
+        id: 'ex_pulloff_cascata_pagode',
+        title: 'Cascata de Pull-Offs para Cordas Soltas',
+        level: 'Nível 1 • Fundamentos',
+        primaryTech: 'pull_off',
+        timeSignature: '2/4',
+        defaultBpm: 92,
+        badge: 'Pull-Off',
+        description: 'Puxadas descendentes rápidas em estilo pagode de viola para obter brilho igual entre nota presa e corda solta.',
+        biomechFocus: 'Tração controlada na ponta do dedo sem esbarrar no par adjacente.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 0, from: 4, to: 0 }], rh: 'P', lh: '4p0', ann: 'Pull-off 4→0 na Prima' },
+            { measure: 1, beat: '1e', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 0, from: 2, to: 0 }], rh: 'P', lh: '2p0', ann: 'Pull-off 2→0 na Prima' },
+            { measure: 1, beat: '2', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 1, from: 5, to: 4 }], rh: 'P', lh: '5p4', ann: 'Pull-off ancorado 5→4 (2º par)' },
+            { measure: 1, beat: '2e', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 1, from: 2, to: 0 }], rh: 'P', lh: '2p0', ann: 'Pull-off 2→0 na Segundinha' },
+            { measure: 2, beat: '1', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 2, from: 3, to: 1 }], rh: 'P', lh: '3p1', ann: 'Pull-off ancorado na Turina (3→1)' },
+            { measure: 2, beat: '1e', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 3, from: 2, to: 0 }], rh: 'P', lh: '2p0', ann: 'Queda de bordão Toeira (2→0)' },
+            { measure: 2, beat: '2', durationBeats: 1.0, tech: 'open', pairs: [{ c: 4, from: 0, to: 0 }, { c: 0, from: 0, to: 0 }], rh: 'p+i', lh: '0-0', ann: 'Resolução aberta Canotilho + Prima' }
+        ]
+    },
+    {
+        id: 'ex_slide_sextas_estradao',
+        title: 'Arrastes em Sextas do Estradão',
+        level: 'Nível 2 • Intermediário',
+        primaryTech: 'slide',
+        timeSignature: '2/4',
+        defaultBpm: 86,
+        badge: 'Slide Paralelo',
+        description: 'Deslizamentos simultâneos nos pares 1 e 3 em sextas caipiras — a assinatura lírica de O Menino da Porteira e modas de estrada.',
+        biomechFocus: 'Alívio de 25% da pinça do polegar atrás do braço e foco visual na casa de chegada.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 0, to: 2 }, { c: 2, from: 0, to: 2 }], rh: 'S', lh: '0/2', ann: 'Slide em sexta 0→2 (E → F♯m)' },
+            { measure: 1, beat: '2', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 2, to: 4 }, { c: 2, from: 2, to: 4 }], rh: 'S', lh: '2/4', ann: 'Slide em sexta 2→4 (F♯m → G♯m)' },
+            { measure: 2, beat: '1', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 4, to: 5 }, { c: 2, from: 4, to: 5 }], rh: 'S', lh: '4/5', ann: 'Slide curto 4→5 (G♯m → A)' },
+            { measure: 2, beat: '2', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 5, to: 7 }, { c: 2, from: 5, to: 7 }], rh: 'S', lh: '5/7', ann: 'Subida até o clímax da 7ª casa (B7)' },
+            { measure: 3, beat: '1', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 7, to: 5 }, { c: 2, from: 7, to: 5 }], rh: 'S', lh: '7\\5', ann: 'Retorno descendente 7→5' },
+            { measure: 3, beat: '2', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 4, to: 2 }, { c: 2, from: 4, to: 2 }], rh: 'S', lh: '4\\2', ann: 'Deslize cadencial 4→2' },
+            { measure: 4, beat: '1', durationBeats: 2.0, tech: 'open', pairs: [{ c: 0, from: 0, to: 0 }, { c: 2, from: 0, to: 0 }, { c: 3, from: 0, to: 0 }], rh: 'p+i', lh: '0-0-0', ann: 'Repouso ressonante na sexta solta' }
+        ]
+    },
+    {
+        id: 'ex_trinado_folia_turina',
+        title: 'Trinado Lírico de Folia & Turina',
+        level: 'Nível 2 • Intermediário',
+        primaryTech: 'trill',
+        timeSignature: '3/4',
+        defaultBpm: 74,
+        badge: 'Trinado ~',
+        description: 'Floreios devocionais com trinados curtos na 1ª e 3ª ordens, típicos das introduções de Folia de Reis e toadas mineiras.',
+        biomechFocus: 'Movimento balístico curto (5–8 mm) com relaxamento imediato pós-trinado.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 1.0, tech: 'open', pairs: [{ c: 3, from: 0, to: 0 }], rh: 'p', lh: '0', ann: 'Bordão fundamental Mi solto' },
+            { measure: 1, beat: '2', durationBeats: 2.0, tech: 'trill', pairs: [{ c: 0, from: 4, to: 5 }], rh: 'TR', lh: '4~5', ann: 'Trinado na Prima (4⇄5: G♯⇄A)' },
+            { measure: 2, beat: '1', durationBeats: 1.0, tech: 'open', pairs: [{ c: 4, from: 0, to: 0 }], rh: 'p', lh: '0', ann: 'Bordão dominante Si solto' },
+            { measure: 2, beat: '2', durationBeats: 2.0, tech: 'trill', pairs: [{ c: 0, from: 2, to: 4 }], rh: 'TR', lh: '2~4', ann: 'Trinado aberto (2⇄4: F♯⇄G♯)' },
+            { measure: 3, beat: '1', durationBeats: 2.0, tech: 'trill', pairs: [{ c: 2, from: 1, to: 3 }], rh: 'TR', lh: '1~3', ann: 'Trinado na Turina oitavada (1⇄3)' },
+            { measure: 3, beat: '3', durationBeats: 1.0, tech: 'open', pairs: [{ c: 0, from: 0, to: 0 }, { c: 2, from: 0, to: 0 }], rh: 'p+i', lh: '0-0', ann: 'Sexta aberta luminosa' }
+        ]
+    },
+    {
+        id: 'ex_harmonico_oitava_seresta',
+        title: 'Campainhas de Harmônico Artificial (+12)',
+        level: 'Nível 2 • Intermediário',
+        primaryTech: 'art_harmonic',
+        timeSignature: '3/4',
+        defaultBpm: 72,
+        badge: 'Harm. +12',
+        description: 'Efeito cristalino de harpa caipira: a mão de escala digita casas 0, 1 e 2 enquanto a outra mão toca o nó exatamente +12 casas adiante.',
+        biomechFocus: 'Toque nodal sem pressão em L/2 com afastamento imediato do dedo indicador.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 3, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Harmônico +12 no 4º par (Nó 12ª casa)' },
+            { measure: 1, beat: '2', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 2, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Harmônico +12 na Turina (Nó 12ª casa)' },
+            { measure: 1, beat: '3', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 1, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Harmônico +12 na Segundinha (Nó 12ª casa)' },
+            { measure: 2, beat: '1', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 0, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Harmônico +12 na Prima (Nó 12ª casa)' },
+            { measure: 2, beat: '2', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 2, from: 1, to: 1 }], rh: 'HARM', lh: '1◇13', ann: 'Casa 1 digitada → Nó na 13ª casa (Acorde A)' },
+            { measure: 2, beat: '3', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 1, from: 2, to: 2 }], rh: 'HARM', lh: '2◇14', ann: 'Casa 2 digitada → Nó na 14ª casa (Acorde A)' },
+            { measure: 3, beat: '1', durationBeats: 1.5, tech: 'art_harmonic', pairs: [{ c: 0, from: 2, to: 2 }], rh: 'HARM', lh: '2◇14', ann: 'Prima casa 2 → Nó exato na 14ª casa' },
+            { measure: 3, beat: '2e', durationBeats: 1.5, tech: 'art_harmonic', pairs: [{ c: 0, from: 0, to: 0 }, { c: 2, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Campainha final em sexta (Nó 12ª)' }
+        ]
+    },
+    {
+        id: 'ex_palma_abafado_baixaria',
+        title: 'Baixaria Abafada (Palm Mute) & Repique',
+        level: 'Nível 1 • Fundamentos',
+        primaryTech: 'palm_mute',
+        timeSignature: '2/4',
+        defaultBpm: 96,
+        badge: 'Palm Mute',
+        description: 'Condução percussiva de bordões com abafamento de palma sobre o rastilho alternando com respostas brilhantes abertas.',
+        biomechFocus: 'Borda hipotenar repousada sobre o rastilho de osso, liberando o pulso apenas nas notas abertas.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 4, from: 0, to: 0 }], rh: 'PM', lh: '0', ann: 'Bordão 5º par abafado (PM)' },
+            { measure: 1, beat: '1e', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 3, from: 2, to: 2 }], rh: 'PM', lh: '2', ann: 'Toeira 2ª casa abafada (PM)' },
+            { measure: 1, beat: '2', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 2, from: 1, to: 1 }], rh: 'PM', lh: '1', ann: 'Turina 1ª casa abafada (PM)' },
+            { measure: 1, beat: '2e', durationBeats: 0.5, tech: 'open', pairs: [{ c: 0, from: 0, to: 0 }, { c: 1, from: 0, to: 0 }], rh: 'p+i', lh: '0-0', ann: 'Acento aberto nos pares agudos!' },
+            { measure: 2, beat: '1', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 3, from: 0, to: 0 }], rh: 'PM', lh: '0', ann: 'Toeira solta abafada (PM)' },
+            { measure: 2, beat: '1e', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 4, from: 2, to: 2 }], rh: 'PM', lh: '2', ann: 'Canotilho 2ª casa abafado (PM)' },
+            { measure: 2, beat: '2', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 4, from: 0, to: 0 }], rh: 'PM', lh: '0', ann: 'Pulso seco no 5º par (PM)' },
+            { measure: 2, beat: '2e', durationBeats: 0.5, tech: 'open', pairs: [{ c: 0, from: 4, to: 4 }, { c: 1, from: 5, to: 5 }], rh: 'p+i', lh: '4-5', ann: 'Resposta aberta em terça (Mi)' }
+        ]
+    },
+    {
+        id: 'ex_misto_tiao_carreiro',
+        title: 'Fraseado Expressivo de Pagode (H/P + Slide)',
+        level: 'Nível 3 • Virtuosismo',
+        primaryTech: 'slide',
+        timeSignature: '2/4',
+        defaultBpm: 102,
+        badge: 'Pagode Expressivo',
+        description: 'Síntese idiomática do pagode caipira combinando martelado inicial, slide até a 7ª casa, pull-off limpo e bordão abafado.',
+        biomechFocus: 'Transição fluida entre ataque perpendicular (H), deslizamento leve (S) e amortecimento no rastilho (PM).',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 0.5, tech: 'hammer_on', pairs: [{ c: 0, from: 0, to: 2 }], rh: 'H', lh: '0h2', ann: 'Disparo inicial com Hammer-on 0→2' },
+            { measure: 1, beat: '1e', durationBeats: 0.5, tech: 'slide', pairs: [{ c: 0, from: 2, to: 4 }, { c: 1, from: 4, to: 5 }], rh: 'S', lh: '2/4', ann: 'Slide em terça 2/4 → 4/5' },
+            { measure: 1, beat: '2', durationBeats: 0.5, tech: 'slide', pairs: [{ c: 0, from: 4, to: 7 }, { c: 1, from: 5, to: 9 }], rh: 'S', lh: '4/7', ann: 'Slide agudo até casas 7/9' },
+            { measure: 1, beat: '2e', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 0, from: 7, to: 4 }], rh: 'P', lh: '7p4', ann: 'Pull-off cortante 7→4' },
+            { measure: 2, beat: '1', durationBeats: 0.5, tech: 'pull_off', pairs: [{ c: 1, from: 5, to: 0 }], rh: 'P', lh: '5p0', ann: 'Soltura rápida 5→0 no 2º par' },
+            { measure: 2, beat: '1e', durationBeats: 0.5, tech: 'palm_mute', pairs: [{ c: 3, from: 2, to: 2 }], rh: 'PM', lh: '2', ann: 'Apoio percussivo abafado na Toeira' },
+            { measure: 2, beat: '2', durationBeats: 1.0, tech: 'open', pairs: [{ c: 4, from: 0, to: 0 }, { c: 0, from: 0, to: 0 }], rh: 'p+i', lh: '0-0', ann: 'Fechamento de pagode solto' }
+        ]
+    },
+    {
+        id: 'ex_fantasia_almir_pantanal',
+        title: 'Ponteio Pantaneiro Completo (6 Técnicas)',
+        level: 'Nível 3 • Virtuosismo',
+        primaryTech: 'art_harmonic',
+        timeSignature: '4/4',
+        defaultBpm: 78,
+        badge: 'Estudo de Concerto',
+        description: 'Estudo avançado integrando todas as 6 técnicas expressivas em uma única narrativa musical pantaneira.',
+        biomechFocus: 'Economia máxima de movimento entre escala, nós harmônicos L/2 e rastilho.',
+        steps: [
+            { measure: 1, beat: '1', durationBeats: 1.0, tech: 'palm_mute', pairs: [{ c: 4, from: 0, to: 0 }], rh: 'PM', lh: '0', ann: 'Pulso grave abafado de introdução' },
+            { measure: 1, beat: '2', durationBeats: 1.0, tech: 'hammer_on', pairs: [{ c: 2, from: 0, to: 1 }], rh: 'H', lh: '0h1', ann: 'Hammer-on expressivo na Turina' },
+            { measure: 1, beat: '3', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 2, to: 4 }, { c: 2, from: 2, to: 4 }], rh: 'S', lh: '2/4', ann: 'Slide em sexta para o 4º traste' },
+            { measure: 1, beat: '4', durationBeats: 1.0, tech: 'trill', pairs: [{ c: 0, from: 4, to: 5 }], rh: 'TR', lh: '4~5', ann: 'Trinado suspenso antes da cadência' },
+            { measure: 2, beat: '1', durationBeats: 1.0, tech: 'pull_off', pairs: [{ c: 0, from: 4, to: 0 }], rh: 'P', lh: '4p0', ann: 'Pull-off liberando a Prima solta' },
+            { measure: 2, beat: '2', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 2, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Harmônico artificial +12 na Turina' },
+            { measure: 2, beat: '3', durationBeats: 2.0, tech: 'art_harmonic', pairs: [{ c: 0, from: 0, to: 0 }, { c: 1, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Acorde final em campainha (Nó 12ª casa)' }
+        ]
+    }
+];
+
+const DEFAULT_EXPRESSIVE_LAB_STATE = {
+    activeExerciseId: 'ex_ligado_tercas_cebolao',
+    selectedTechId: 'hammer_on',
+    sandboxInterval: 2,
+    sandboxDuad: false,
+    bpm: 84,
+    speedMultiplier: 1.0,
+    isLooping: true,
+    countInEnabled: true,
+    clickEnabled: true,
+    speedRampEnabled: false,
+    speedRampStep: 4,
+    speedRampMax: 132,
+    isPlaying: false,
+    isCountingIn: false,
+    countInBeat: 0,
+    currentStepIdx: 0,
+    customModeActive: false,
+    sandboxSteps: [
+        { measure: 1, beat: '1', durationBeats: 1.0, tech: 'hammer_on', pairs: [{ c: 0, from: 0, to: 2 }], rh: 'H', lh: '0h2', ann: 'Hammer-on 0→2 na Prima' },
+        { measure: 1, beat: '2', durationBeats: 1.0, tech: 'pull_off', pairs: [{ c: 0, from: 4, to: 2 }], rh: 'P', lh: '4p2', ann: 'Pull-off 4→2 na Prima' },
+        { measure: 2, beat: '1', durationBeats: 1.0, tech: 'slide', pairs: [{ c: 0, from: 2, to: 4 }, { c: 1, from: 4, to: 5 }], rh: 'S', lh: '2/4', ann: 'Slide paralelo em terças' },
+        { measure: 2, beat: '2', durationBeats: 1.0, tech: 'art_harmonic', pairs: [{ c: 0, from: 0, to: 0 }], rh: 'HARM', lh: '0◇12', ann: 'Harmônico artificial +12' }
+    ],
+    completedExercises: []
+};
+
 
 const DEFAULT_SOLFEGE_STATE = {
     subTab: 'interval', // 'interval' | 'dictation'
@@ -4355,7 +4738,8 @@ const CAIPIRA_DICTATION_PHRASES = [
         pagode: Object.assign({}, DEFAULT_PAGODE_STATE),
         strobeTuner: JSON.parse(JSON.stringify(DEFAULT_STROBE_TUNER_STATE)),
         stageEq: JSON.parse(JSON.stringify(DEFAULT_STAGE_EQ_STATE)),
-        improvStudio: JSON.parse(JSON.stringify(DEFAULT_IMPROV_STUDIO_STATE))
+        improvStudio: JSON.parse(JSON.stringify(DEFAULT_IMPROV_STUDIO_STATE)),
+        expressiveLab: JSON.parse(JSON.stringify(DEFAULT_EXPRESSIVE_LAB_STATE))
     };
 
     // Estado do Web Audio API e Metrônomo Lookahead
@@ -4460,6 +4844,25 @@ const CAIPIRA_DICTATION_PHRASES = [
         lastVisualBarIdx: -1,
         lastVisualBeatIdx: -1,
         liveStatus: 'Escolha uma base caipira, ligue o Play e grave até 4 pistas no Looper sincronizado!'
+    };
+
+    // Fase 22: Variáveis DSP do Laboratório de Técnicas Expressivas & Biomecânica
+    let expressiveAudioGraph = null;
+    let expressiveSchedulerTimer = null;
+    let expressiveRafId = null;
+    let expressiveVisualQueue = [];
+    let expressiveRuntime = {
+        nextStepAudioTime: 0,
+        nextTickStepIdx: 0,
+        isCountingIn: false,
+        countInStep: 0,
+        countInBeatsTotal: 2,
+        activeAnimStepIdx: -1,
+        animStartTime: 0,
+        animEndTime: 0,
+        lastSandboxPreview: null,
+        cycleCount: 0,
+        liveStatus: 'Escolha uma técnica ou exercício e clique no braço SVG ou pressione Iniciar Treino.'
     };
 
     function ensureAudioContext() {
@@ -5901,6 +6304,21 @@ const CAIPIRA_DICTATION_PHRASES = [
 
     function playPonteioEvent(step) {
         if (!step) return;
+        if (step.expressive && step.expressive.tech && Array.isArray(step.expressive.pairs)) {
+            const durSec = Math.max(0.20, step.d || 0.28);
+            step.expressive.pairs.forEach((pr, idx) => {
+                synthExpressiveCourse({
+                    courseIdx: pr.c,
+                    fromFret: pr.from,
+                    toFret: pr.to,
+                    tech: step.expressive.tech,
+                    timeOffsetSec: idx * 0.008,
+                    durationSec: durSec
+                });
+                flashFretCell(pr.c, pr.to, idx * 8);
+            });
+            return;
+        }
         if (step.rh === 'tap') {
             playWoodTap(0, 0.9);
             return;
@@ -24202,6 +24620,1366 @@ function bindSolfegeEvents() {
         bindImprovTrackStripEvents();
     }
 
+    // =========================================================================
+    // MOTOR FASE 22: LABORATÓRIO DE TÉCNICAS EXPRESSIVAS & BIOMECÂNICA DE MÃO
+    // =========================================================================
+    function getExpressiveTechMeta(techId) {
+        if (EXPRESSIVE_TECHNIQUES_CATALOG[techId]) return EXPRESSIVE_TECHNIQUES_CATALOG[techId];
+        return {
+            id: 'open',
+            symbol: '•',
+            name: 'Nota Aberta (Referência)',
+            shortName: 'Aberta',
+            badge: 'Resolução',
+            color: '#94a3b8',
+            pillClass: 'bg-slate-800 text-slate-200 border-slate-700',
+            tabPrefix: '',
+            shortRule: 'Dedilhado limpo padrão para contraste e resolução dentro das frases técnicas.',
+            angleDeg: 85,
+            forceLabel: 'Pinça Padrão Equilibrada',
+            tensionPct: 22,
+            riskLabel: 'Mínimo',
+            biomech: {
+                leftHanded: {
+                    frettingHand: 'Mão Direita (Escala)',
+                    pickingHand: 'Mão Esquerda (Boca)',
+                    frettingCue: 'Apoio limpo próximo ao traste sem tensão excessiva.',
+                    pickingCue: 'Dedilhado firme e relaxado na boca da viola.',
+                    postureAlert: 'Mantenha ombros soltos e respiração livre.'
+                },
+                rightHanded: {
+                    frettingHand: 'Mão Esquerda (Escala)',
+                    pickingHand: 'Mão Direita (Boca)',
+                    frettingCue: 'Apoio limpo próximo ao traste sem tensão excessiva.',
+                    pickingCue: 'Dedilhado firme e relaxado na boca da viola.',
+                    postureAlert: 'Mantenha ombros soltos e respiração livre.'
+                }
+            }
+        };
+    }
+
+    function getActiveExpressiveExercise() {
+        const st = state.expressiveLab || DEFAULT_EXPRESSIVE_LAB_STATE;
+        return EXPRESSIVE_EXERCISES_CATALOG.find((ex) => ex.id === st.activeExerciseId) || EXPRESSIVE_EXERCISES_CATALOG[0];
+    }
+
+    function getActiveExpressiveSteps() {
+        const st = state.expressiveLab || DEFAULT_EXPRESSIVE_LAB_STATE;
+        if (st.customModeActive && Array.isArray(st.sandboxSteps) && st.sandboxSteps.length > 0) {
+            return st.sandboxSteps;
+        }
+        return getActiveExpressiveExercise().steps || [];
+    }
+
+    function getActiveExpressiveOverlayStep() {
+        const st = state.expressiveLab || DEFAULT_EXPRESSIVE_LAB_STATE;
+        if (!st.isPlaying && expressiveRuntime.lastSandboxPreview) {
+            return expressiveRuntime.lastSandboxPreview;
+        }
+        const steps = getActiveExpressiveSteps();
+        if (!steps || steps.length === 0) return null;
+        const idx = Math.max(0, Math.min(steps.length - 1, st.currentStepIdx || 0));
+        return steps[idx];
+    }
+
+    function getExpressiveStepDurationSec(step) {
+        const st = state.expressiveLab || DEFAULT_EXPRESSIVE_LAB_STATE;
+        const bpm = Math.max(45, Math.min(200, st.bpm || 84));
+        const mult = Math.max(0.25, st.speedMultiplier || 1.0);
+        const beats = (step && step.durationBeats) ? step.durationBeats : 0.5;
+        return beats * (60 / (bpm * mult));
+    }
+
+    function formatExpressiveStepNotes(step, inst) {
+        if (!step || !Array.isArray(step.pairs) || !inst) return '—';
+        return step.pairs.map((pr) => {
+            const c = inst.courses[Math.max(0, Math.min(inst.courses.length - 1, pr.c || 0))];
+            if (!c) return '';
+            const pcFrom = (c.pitchClass + pr.from) % 12;
+            const pcTo = (c.pitchClass + pr.to) % 12;
+            if (step.tech === 'art_harmonic') {
+                return `${c.num}ºP ${NOTE_NAMES[pcFrom]}(◇${pr.from + 12})`;
+            }
+            if (pr.from !== pr.to) {
+                return `${c.num}ºP ${NOTE_NAMES[pcFrom]}→${NOTE_NAMES[pcTo]}`;
+            }
+            return `${c.num}ºP ${NOTE_NAMES[pcFrom]}`;
+        }).filter(Boolean).join(' • ');
+    }
+
+    function ensureExpressiveAudioGraph() {
+        const ctx = ensureAudioContext();
+        if (!ctx) return null;
+        if (expressiveAudioGraph && expressiveAudioGraph.ctx === ctx) return expressiveAudioGraph;
+
+        const limiter = ctx.createDynamicsCompressor();
+        limiter.threshold.value = -4.0;
+        limiter.knee.value = 3.0;
+        limiter.ratio.value = 12.0;
+        limiter.attack.value = 0.002;
+        limiter.release.value = 0.08;
+
+        const masterGain = ctx.createGain();
+        masterGain.gain.value = 0.90;
+        limiter.connect(masterGain);
+        masterGain.connect(ctx.destination);
+
+        expressiveAudioGraph = { ctx, limiter, masterGain };
+        return expressiveAudioGraph;
+    }
+
+    function triggerExpressiveMechanicalNoise(absTime, freqHz, qVal, durSec, gainVal, destNode) {
+        if (!expressiveAudioGraph || !destNode) return;
+        const ctx = expressiveAudioGraph.ctx;
+        try {
+            const len = Math.max(48, Math.floor(ctx.sampleRate * durSec));
+            const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+            const ch = buf.getChannelData(0);
+            for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+
+            const src = ctx.createBufferSource();
+            src.buffer = buf;
+
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(freqHz, absTime);
+            filter.Q.setValueAtTime(qVal, absTime);
+
+            const ng = ctx.createGain();
+            ng.gain.setValueAtTime(0.0001, absTime);
+            ng.gain.linearRampToValueAtTime(gainVal, absTime + 0.002);
+            ng.gain.exponentialRampToValueAtTime(0.0001, absTime + durSec);
+
+            src.connect(filter);
+            filter.connect(ng);
+            ng.connect(destNode);
+
+            src.start(absTime);
+            src.stop(absTime + durSec + 0.01);
+        } catch (_) {}
+    }
+
+    function synthExpressiveCourse(opts) {
+        const g = ensureExpressiveAudioGraph();
+        if (!g) return;
+        const ctx = g.ctx;
+        const inst = opts.inst || INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const cIdx = Math.max(0, Math.min(inst.courses.length - 1, opts.courseIdx || 0));
+        const course = inst.courses[cIdx];
+        if (!course) return;
+
+        const fromFret = Math.max(0, Math.min(14, opts.fromFret ?? 0));
+        const toFret = Math.max(0, Math.min(14, opts.toFret ?? fromFret));
+        const tech = opts.tech || 'open';
+        const dur = Math.max(0.18, opts.durationSec || 0.55);
+        const gainScale = Math.max(0.1, Math.min(1.5, opts.gainScale ?? 1.0));
+        const t0 = typeof opts.absStartTime === 'number'
+            ? Math.max(ctx.currentTime, opts.absStartTime)
+            : (ctx.currentTime + Math.max(0, opts.timeOffsetSec || 0));
+
+        const wireMidis = (inst.isPaired && course.midi.length === 2) ? course.midi : [course.midi[0]];
+
+        wireMidis.forEach((baseMidi, wIdx) => {
+            const fFrom = midiToFreq(baseMidi + fromFret);
+            const fTo = midiToFreq(baseMidi + toFret);
+            const wireStart = t0 + wIdx * 0.004;
+            const detuneBase = wireMidis.length === 2 ? (wIdx === 0 ? -1.5 : 1.5) : 0;
+            const wireVol = (wireMidis.length === 2 ? (wIdx === 0 ? 0.18 : 0.16) : 0.24) * gainScale;
+
+            if (tech === 'art_harmonic') {
+                // Harmônico Artificial de Oitava (+12 casas): fundamental suprimida, 2ª parcial cristalina dominante
+                const fHarm2 = fFrom * 2.0;
+                const fHarm4 = fFrom * 4.0;
+                const hDur = Math.max(1.25, dur * 1.55);
+
+                const env = ctx.createGain();
+                const bellFilter = ctx.createBiquadFilter();
+                bellFilter.type = 'bandpass';
+                bellFilter.frequency.setValueAtTime(Math.min(7200, fHarm2 * 1.04), wireStart);
+                bellFilter.Q.setValueAtTime(1.1, wireStart);
+
+                const oscH2 = ctx.createOscillator();
+                const oscH4 = ctx.createOscillator();
+                const oscFund = ctx.createOscillator();
+                oscH2.type = 'sine';
+                oscH4.type = 'triangle';
+                oscFund.type = 'sine';
+
+                oscH2.frequency.setValueAtTime(fHarm2, wireStart);
+                oscH4.frequency.setValueAtTime(fHarm4, wireStart);
+                oscFund.frequency.setValueAtTime(fFrom, wireStart);
+                oscH2.detune.setValueAtTime(detuneBase, wireStart);
+
+                const gH2 = ctx.createGain();
+                const gH4 = ctx.createGain();
+                const gFund = ctx.createGain();
+                gH2.gain.value = 0.84;
+                gH4.gain.value = 0.10;
+                gFund.gain.value = 0.06;
+
+                env.gain.setValueAtTime(0.0001, wireStart);
+                env.gain.linearRampToValueAtTime(wireVol * 1.15, wireStart + 0.014);
+                env.gain.exponentialRampToValueAtTime(wireVol * 0.48, wireStart + 0.28);
+                env.gain.exponentialRampToValueAtTime(0.0001, wireStart + hDur);
+
+                oscH2.connect(gH2);
+                oscH4.connect(gH4);
+                oscFund.connect(gFund);
+                gH2.connect(bellFilter);
+                gH4.connect(bellFilter);
+                gFund.connect(env);
+                bellFilter.connect(env);
+                env.connect(g.limiter);
+
+                oscH2.start(wireStart);
+                oscH4.start(wireStart);
+                oscFund.start(wireStart);
+                oscH2.stop(wireStart + hDur + 0.03);
+                oscH4.stop(wireStart + hDur + 0.03);
+                oscFund.stop(wireStart + hDur + 0.03);
+                return;
+            }
+
+            if (tech === 'palm_mute') {
+                // Abafado de Palma (Palm Mute): corte agudo severo e decaimento percussivo curto
+                const pmDur = Math.min(0.30, Math.max(0.15, dur * 0.65));
+                const env = ctx.createGain();
+                const bodyFilter = ctx.createBiquadFilter();
+                bodyFilter.type = 'lowpass';
+                bodyFilter.frequency.setValueAtTime(Math.min(860, fFrom * 2.1), wireStart);
+                bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(150, fFrom * 1.12), wireStart + 0.085);
+                bodyFilter.Q.setValueAtTime(1.8, wireStart);
+
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                osc1.type = 'triangle';
+                osc2.type = 'sawtooth';
+                osc1.frequency.setValueAtTime(fFrom, wireStart);
+                osc2.frequency.setValueAtTime(fFrom, wireStart);
+                osc1.detune.setValueAtTime(detuneBase, wireStart);
+                osc2.detune.setValueAtTime(detuneBase + 1.2, wireStart);
+
+                const g1 = ctx.createGain();
+                const g2 = ctx.createGain();
+                g1.gain.value = 0.82;
+                g2.gain.value = 0.18;
+
+                env.gain.setValueAtTime(0.0001, wireStart);
+                env.gain.linearRampToValueAtTime(wireVol * 1.05, wireStart + 0.004);
+                env.gain.exponentialRampToValueAtTime(0.0001, wireStart + pmDur);
+
+                osc1.connect(g1);
+                osc2.connect(g2);
+                g1.connect(bodyFilter);
+                g2.connect(bodyFilter);
+                bodyFilter.connect(env);
+                env.connect(g.limiter);
+
+                osc1.start(wireStart);
+                osc2.start(wireStart);
+                osc1.stop(wireStart + pmDur + 0.02);
+                osc2.stop(wireStart + pmDur + 0.02);
+
+                if (wIdx === 0) {
+                    triggerExpressiveMechanicalNoise(wireStart, 210, 2.2, 0.022, 0.065 * gainScale, g.limiter);
+                }
+                return;
+            }
+
+            // Ligados (hammer_on, pull_off), Arraste Contínuo (slide), Trinado (trill) e Aberta (open)
+            const totalDur = Math.max(0.45, dur * 1.35);
+            const env = ctx.createGain();
+            const bodyFilter = ctx.createBiquadFilter();
+            bodyFilter.type = 'lowpass';
+            bodyFilter.Q.setValueAtTime(1.4, wireStart);
+
+            const osc1 = ctx.createOscillator();
+            const osc2 = ctx.createOscillator();
+            osc1.type = 'triangle';
+            osc2.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(fFrom, wireStart);
+            osc2.frequency.setValueAtTime(fFrom, wireStart);
+            osc1.detune.setValueAtTime(detuneBase, wireStart);
+            osc2.detune.setValueAtTime(detuneBase + 1.5, wireStart);
+
+            const g1 = ctx.createGain();
+            const g2 = ctx.createGain();
+            g1.gain.value = 0.72;
+            g2.gain.value = 0.28;
+
+            bodyFilter.frequency.setValueAtTime(Math.min(5800, fFrom * 6.4), wireStart);
+
+            env.gain.setValueAtTime(0.0001, wireStart);
+            env.gain.linearRampToValueAtTime(wireVol, wireStart + 0.006);
+
+            if (tech === 'hammer_on' || tech === 'pull_off') {
+                const tSwitch = wireStart + Math.min(0.24, Math.max(0.085, dur * 0.36));
+                const rampSec = tech === 'hammer_on' ? 0.009 : 0.007;
+
+                osc1.frequency.setValueAtTime(fFrom, Math.max(wireStart, tSwitch - 0.003));
+                osc2.frequency.setValueAtTime(fFrom, Math.max(wireStart, tSwitch - 0.003));
+                osc1.frequency.exponentialRampToValueAtTime(fTo, tSwitch + rampSec);
+                osc2.frequency.exponentialRampToValueAtTime(fTo, tSwitch + rampSec);
+
+                if (tech === 'hammer_on') {
+                    bodyFilter.frequency.exponentialRampToValueAtTime(Math.min(3600, fTo * 3.8), tSwitch + 0.015);
+                    bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(400, fTo * 1.7), wireStart + totalDur * 0.85);
+                    env.gain.exponentialRampToValueAtTime(wireVol * 0.56, tSwitch);
+                    env.gain.exponentialRampToValueAtTime(0.0001, wireStart + totalDur);
+                    if (wIdx === 0) {
+                        triggerExpressiveMechanicalNoise(tSwitch, 1850, 4.5, 0.014, 0.045 * gainScale, g.limiter);
+                    }
+                } else {
+                    // Pull-off tem leve impulso de beliscão na corda
+                    bodyFilter.frequency.exponentialRampToValueAtTime(Math.min(5000, fTo * 4.8), tSwitch + 0.014);
+                    bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(420, fTo * 1.8), wireStart + totalDur * 0.85);
+                    env.gain.exponentialRampToValueAtTime(wireVol * 0.52, tSwitch);
+                    env.gain.linearRampToValueAtTime(wireVol * 0.64, tSwitch + 0.012);
+                    env.gain.exponentialRampToValueAtTime(0.0001, wireStart + totalDur);
+                }
+            } else if (tech === 'slide') {
+                const tHold = wireStart + Math.min(0.065, dur * 0.16);
+                const tSlideEnd = wireStart + Math.max(0.14, dur * 0.78);
+
+                osc1.frequency.setValueAtTime(fFrom, tHold);
+                osc2.frequency.setValueAtTime(fFrom, tHold);
+                osc1.frequency.exponentialRampToValueAtTime(fTo, tSlideEnd);
+                osc2.frequency.exponentialRampToValueAtTime(fTo, tSlideEnd);
+
+                bodyFilter.frequency.setValueAtTime(Math.min(5600, fFrom * 6.0), tHold);
+                bodyFilter.frequency.exponentialRampToValueAtTime(Math.min(4800, fTo * 4.2), tSlideEnd);
+                bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(420, fTo * 1.8), wireStart + totalDur * 0.9);
+
+                env.gain.exponentialRampToValueAtTime(wireVol * 0.54, tSlideEnd);
+                env.gain.exponentialRampToValueAtTime(0.0001, wireStart + totalDur);
+
+                if (wIdx === 0 && Math.abs(toFret - fromFret) >= 2) {
+                    triggerExpressiveMechanicalNoise(tHold, 1120, 3.2, Math.min(0.12, (tSlideEnd - tHold) * 0.6), 0.022 * gainScale, g.limiter);
+                }
+            } else if (tech === 'trill') {
+                const nAlts = Math.max(4, Math.min(7, Math.round((dur * 0.82) / 0.072)));
+                const stepTr = (dur * 0.80) / nAlts;
+                for (let k = 1; k <= nAlts; k++) {
+                    const tStep = wireStart + k * stepTr;
+                    const nextFreq = (k % 2 === 1) ? fTo : fFrom;
+                    osc1.frequency.exponentialRampToValueAtTime(nextFreq, tStep);
+                    osc2.frequency.exponentialRampToValueAtTime(nextFreq, tStep);
+                }
+                const tResolve = wireStart + dur * 0.84;
+                osc1.frequency.exponentialRampToValueAtTime(fFrom, tResolve);
+                osc2.frequency.exponentialRampToValueAtTime(fFrom, tResolve);
+
+                bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(440, fFrom * 2.0), wireStart + totalDur * 0.88);
+                env.gain.exponentialRampToValueAtTime(wireVol * 0.44, wireStart + dur * 0.45);
+                env.gain.exponentialRampToValueAtTime(0.0001, wireStart + totalDur);
+            } else {
+                // Nota Aberta
+                bodyFilter.frequency.exponentialRampToValueAtTime(Math.max(420, fFrom * 1.8), wireStart + totalDur * 0.78);
+                env.gain.exponentialRampToValueAtTime(wireVol * 0.44, wireStart + 0.16);
+                env.gain.exponentialRampToValueAtTime(0.0001, wireStart + totalDur);
+            }
+
+            osc1.connect(g1);
+            osc2.connect(g2);
+            g1.connect(bodyFilter);
+            g2.connect(bodyFilter);
+            bodyFilter.connect(env);
+            env.connect(g.limiter);
+
+            osc1.start(wireStart);
+            osc2.start(wireStart);
+            osc1.stop(wireStart + totalDur + 0.03);
+            osc2.stop(wireStart + totalDur + 0.03);
+        });
+    }
+
+    function playExpressiveStepAudio(step, absStartTime, durSec) {
+        if (!step || !Array.isArray(step.pairs)) return;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const effDur = durSec || getExpressiveStepDurationSec(step);
+        step.pairs.forEach((pr, idx) => {
+            synthExpressiveCourse({
+                courseIdx: pr.c,
+                fromFret: pr.from,
+                toFret: pr.to,
+                tech: step.tech || 'open',
+                absStartTime: typeof absStartTime === 'number' ? (absStartTime + idx * 0.007) : undefined,
+                timeOffsetSec: typeof absStartTime === 'number' ? undefined : (idx * 0.007),
+                durationSec: effDur,
+                gainScale: 1.0,
+                inst
+            });
+        });
+    }
+
+    function scheduleExpressiveGuideClick(absTime, isDownbeat) {
+        const g = ensureExpressiveAudioGraph();
+        if (!g) return;
+        const ctx = g.ctx;
+        const osc = ctx.createOscillator();
+        const cg = ctx.createGain();
+        osc.type = isDownbeat ? 'triangle' : 'sine';
+        osc.frequency.setValueAtTime(isDownbeat ? 1140 : 740, absTime);
+        cg.gain.setValueAtTime(0.0001, absTime);
+        cg.gain.linearRampToValueAtTime(isDownbeat ? 0.24 : 0.13, absTime + 0.002);
+        cg.gain.exponentialRampToValueAtTime(0.0001, absTime + 0.044);
+        osc.connect(cg);
+        cg.connect(g.limiter);
+        osc.start(absTime);
+        osc.stop(absTime + 0.05);
+    }
+
+    function stopExpressiveLab() {
+        if (expressiveSchedulerTimer) {
+            clearInterval(expressiveSchedulerTimer);
+            expressiveSchedulerTimer = null;
+        }
+        if (expressiveRafId) {
+            cancelAnimationFrame(expressiveRafId);
+            expressiveRafId = null;
+        }
+        expressiveVisualQueue = [];
+        expressiveRuntime.isCountingIn = false;
+        expressiveRuntime.countInStep = 0;
+        expressiveRuntime.activeAnimStepIdx = -1;
+        expressiveRuntime.animStartTime = 0;
+        expressiveRuntime.animEndTime = 0;
+
+        if (state.expressiveLab) {
+            state.expressiveLab.isPlaying = false;
+            state.expressiveLab.isCountingIn = false;
+            state.expressiveLab.countInBeat = 0;
+        }
+        updateExpressiveTransportDOM();
+    }
+
+    function expressiveSchedulerTick() {
+        const st = state.expressiveLab;
+        if (!st || !st.isPlaying) return;
+        const g = ensureExpressiveAudioGraph();
+        if (!g) return;
+        const ctx = g.ctx;
+        const steps = getActiveExpressiveSteps();
+        if (!steps || steps.length === 0) {
+            stopExpressiveLab();
+            return;
+        }
+
+        const scheduleAheadSec = 0.11;
+        while (expressiveRuntime.nextStepAudioTime < ctx.currentTime + scheduleAheadSec) {
+            // Fase de Count-In de 1 compasso
+            if (expressiveRuntime.isCountingIn) {
+                const beatDur = 60 / (Math.max(45, st.bpm || 84) * Math.max(0.25, st.speedMultiplier || 1.0));
+                const bIdx = expressiveRuntime.countInStep;
+                scheduleExpressiveGuideClick(expressiveRuntime.nextStepAudioTime, bIdx === 0);
+                expressiveVisualQueue.push({
+                    type: 'countin',
+                    beatIdx: bIdx,
+                    audioTime: expressiveRuntime.nextStepAudioTime
+                });
+
+                expressiveRuntime.nextStepAudioTime += beatDur;
+                expressiveRuntime.countInStep++;
+                if (expressiveRuntime.countInStep >= expressiveRuntime.countInBeatsTotal) {
+                    expressiveRuntime.isCountingIn = false;
+                    expressiveRuntime.nextTickStepIdx = 0;
+                }
+                continue;
+            }
+
+            const idx = expressiveRuntime.nextTickStepIdx;
+            if (idx >= steps.length) {
+                if (st.isLooping) {
+                    expressiveRuntime.nextTickStepIdx = 0;
+                    expressiveRuntime.cycleCount++;
+                    if (st.speedRampEnabled && st.bpm < (st.speedRampMax || 132)) {
+                        st.bpm = Math.min(st.speedRampMax || 132, st.bpm + (st.speedRampStep || 4));
+                        expressiveVisualQueue.push({
+                            type: 'bpm_ramp',
+                            bpm: st.bpm,
+                            audioTime: expressiveRuntime.nextStepAudioTime
+                        });
+                    }
+                    continue;
+                } else {
+                    expressiveVisualQueue.push({
+                        type: 'stop_end',
+                        audioTime: expressiveRuntime.nextStepAudioTime
+                    });
+                    if (expressiveSchedulerTimer) {
+                        clearInterval(expressiveSchedulerTimer);
+                        expressiveSchedulerTimer = null;
+                    }
+                    break;
+                }
+            }
+
+            const step = steps[idx];
+            const stepDur = getExpressiveStepDurationSec(step);
+            const tStart = expressiveRuntime.nextStepAudioTime;
+
+            if (st.clickEnabled) {
+                const isNewBar = idx === 0 || (steps[idx - 1] && steps[idx - 1].measure !== step.measure);
+                scheduleExpressiveGuideClick(tStart, isNewBar);
+            }
+
+            playExpressiveStepAudio(step, tStart, stepDur);
+
+            expressiveVisualQueue.push({
+                type: 'step',
+                stepIdx: idx,
+                step,
+                audioTime: tStart,
+                endAudioTime: tStart + stepDur
+            });
+
+            expressiveRuntime.nextStepAudioTime += stepDur;
+            expressiveRuntime.nextTickStepIdx = idx + 1;
+        }
+    }
+
+    function expressiveRafLoop() {
+        const st = state.expressiveLab;
+        if (!st || !st.isPlaying) {
+            expressiveRafId = null;
+            return;
+        }
+        const ctx = audioCtx;
+        const now = ctx ? ctx.currentTime : 0;
+
+        while (expressiveVisualQueue.length > 0 && expressiveVisualQueue[0].audioTime <= now + 0.015) {
+            const ev = expressiveVisualQueue.shift();
+            if (ev.type === 'countin') {
+                st.isCountingIn = true;
+                st.countInBeat = ev.beatIdx + 1;
+                expressiveRuntime.liveStatus = `Contagem de entrada: ${ev.beatIdx + 1} / ${expressiveRuntime.countInBeatsTotal}...`;
+                updateExpressiveActiveStepDOM();
+            } else if (ev.type === 'bpm_ramp') {
+                const bpmLbl = document.getElementById('viola-exp-bpm-lbl');
+                const bpmSlider = document.getElementById('viola-exp-bpm-slider');
+                if (bpmLbl) bpmLbl.textContent = `${ev.bpm} BPM`;
+                if (bpmSlider) bpmSlider.value = String(ev.bpm);
+                expressiveRuntime.liveStatus = `Aceleração Progressiva: novo ciclo a ${ev.bpm} BPM!`;
+                updateExpressiveActiveStepDOM();
+            } else if (ev.type === 'stop_end') {
+                stopExpressiveLab();
+                st.currentStepIdx = 0;
+                expressiveRuntime.liveStatus = 'Frase concluída! Revise a biomecânica ou ative o Loop contínuo.';
+                updateExpressiveActiveStepDOM();
+                if (state.displayMode === 'EXPRESSIVE') renderFretboardSVG();
+                return;
+            } else if (ev.type === 'step') {
+                st.isCountingIn = false;
+                st.currentStepIdx = ev.stepIdx;
+                expressiveRuntime.activeAnimStepIdx = ev.stepIdx;
+                expressiveRuntime.animStartTime = ev.audioTime;
+                expressiveRuntime.animEndTime = ev.endAudioTime;
+                expressiveRuntime.lastSandboxPreview = null;
+
+                const tMeta = getExpressiveTechMeta(ev.step.tech);
+                expressiveRuntime.liveStatus = `Passo ${ev.stepIdx + 1}: ${tMeta.shortName} (${ev.step.lh || '—'}) — ${ev.step.ann || ''}`;
+                updateExpressiveActiveStepDOM();
+                if (state.displayMode === 'EXPRESSIVE') {
+                    renderFretboardSVG();
+                }
+            }
+        }
+
+        // Animação fluida a 60 FPS do cursor de Slide sobre o braço SVG
+        if (state.displayMode === 'EXPRESSIVE' && expressiveRuntime.animEndTime > expressiveRuntime.animStartTime) {
+            const cursors = document.querySelectorAll('[data-exp-slide-cursor]');
+            if (cursors.length > 0) {
+                const rawP = (now - expressiveRuntime.animStartTime) / (expressiveRuntime.animEndTime - expressiveRuntime.animStartTime);
+                const slideStart = 0.14;
+                const slideEnd = 0.78;
+                const p = Math.max(0, Math.min(1, (rawP - slideStart) / (slideEnd - slideStart)));
+                cursors.forEach((cEl) => {
+                    const fx = parseFloat(cEl.getAttribute('data-from-x')) || 0;
+                    const tx = parseFloat(cEl.getAttribute('data-to-x')) || 0;
+                    cEl.setAttribute('cx', (fx + (tx - fx) * p).toFixed(2));
+                });
+            }
+        }
+
+        expressiveRafId = requestAnimationFrame(expressiveRafLoop);
+    }
+
+    function startExpressivePlayback() {
+        const st = state.expressiveLab;
+        if (!st) return;
+        if (st.isPlaying) {
+            stopExpressiveLab();
+            return;
+        }
+
+        stopAllAudio();
+        const g = ensureExpressiveAudioGraph();
+        if (!g) return;
+
+        const ex = getActiveExpressiveExercise();
+        const sigBeats = (ex && ex.timeSignature === '3/4') ? 3 : ((ex && ex.timeSignature === '4/4') ? 4 : 2);
+
+        st.isPlaying = true;
+        st.currentStepIdx = 0;
+        state.displayMode = 'EXPRESSIVE';
+        expressiveVisualQueue = [];
+        expressiveRuntime.cycleCount = 0;
+        expressiveRuntime.nextTickStepIdx = 0;
+        expressiveRuntime.countInBeatsTotal = sigBeats;
+        expressiveRuntime.isCountingIn = Boolean(st.countInEnabled);
+        expressiveRuntime.countInStep = 0;
+        expressiveRuntime.nextStepAudioTime = g.ctx.currentTime + 0.06;
+        expressiveRuntime.lastSandboxPreview = null;
+
+        updateExpressiveTransportDOM();
+        if (isFretboardVisibleInFocus()) renderFretboardSVG();
+
+        expressiveSchedulerTick();
+        expressiveSchedulerTimer = setInterval(expressiveSchedulerTick, 25);
+        expressiveRafId = requestAnimationFrame(expressiveRafLoop);
+    }
+
+    function handleExpressiveFretboardClick(cIdx, f) {
+        const st = state.expressiveLab;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const tech = st.selectedTechId || 'hammer_on';
+        const iv = st.sandboxInterval;
+        let fromF = f;
+        let toF = f;
+
+        if (tech === 'hammer_on') {
+            const delta = typeof iv === 'number' ? Math.max(1, Math.abs(iv)) : 2;
+            if (f + delta <= 14) {
+                fromF = f;
+                toF = f + delta;
+            } else {
+                fromF = Math.max(0, f - delta);
+                toF = f;
+            }
+        } else if (tech === 'pull_off') {
+            const delta = iv === 'to_open' ? f : (typeof iv === 'number' ? Math.max(1, Math.abs(iv)) : 2);
+            if (iv === 'to_open') {
+                fromF = f > 0 ? f : 2;
+                toF = 0;
+            } else if (f - delta >= 0) {
+                fromF = f;
+                toF = f - delta;
+            } else {
+                fromF = Math.min(14, f + delta);
+                toF = f;
+            }
+        } else if (tech === 'slide') {
+            const delta = iv === 'to_open' ? -f : (typeof iv === 'number' ? iv : 2);
+            fromF = f;
+            toF = Math.max(0, Math.min(14, f + delta));
+            if (toF === fromF) {
+                toF = f <= 12 ? f + 2 : f - 2;
+            }
+        } else if (tech === 'trill') {
+            const delta = typeof iv === 'number' ? Math.max(1, Math.min(3, Math.abs(iv))) : 1;
+            fromF = f;
+            toF = f + delta <= 14 ? f + delta : Math.max(0, f - delta);
+        } else if (tech === 'art_harmonic') {
+            fromF = Math.min(14, f);
+            toF = fromF;
+        } else if (tech === 'palm_mute') {
+            fromF = f;
+            toF = f;
+        }
+
+        const pairs = [{ c: cIdx, from: fromF, to: toF }];
+        if (st.sandboxDuad && cIdx + 1 < inst.courses.length) {
+            const partnerIdx = (tech === 'slide' && cIdx + 2 < inst.courses.length) ? (cIdx + 2) : (cIdx + 1);
+            pairs.push({ c: partnerIdx, from: fromF, to: toF });
+        }
+
+        const tMeta = getExpressiveTechMeta(tech);
+        const lhStr = tech === 'art_harmonic'
+            ? `${fromF}◇${fromF + 12}`
+            : (tech === 'palm_mute' ? `${fromF}(PM)` : `${fromF}${tMeta.tabPrefix || '→'}${toF}`);
+
+        const previewStep = {
+            measure: 1,
+            beat: '1',
+            durationBeats: tech === 'trill' ? 1.5 : 1.0,
+            tech,
+            pairs,
+            rh: tMeta.symbol,
+            lh: lhStr,
+            ann: `${tMeta.shortName} no ${inst.courses[cIdx].num}º par (${lhStr})`
+        };
+
+        expressiveRuntime.lastSandboxPreview = previewStep;
+        expressiveRuntime.liveStatus = `Preview Sandbox: ${previewStep.ann}`;
+        const g = ensureExpressiveAudioGraph();
+        const nowT = g ? g.ctx.currentTime + 0.01 : undefined;
+        const playDur = tech === 'trill' ? 0.95 : 0.72;
+        if (g && tech === 'slide') {
+            expressiveRuntime.animStartTime = nowT;
+            expressiveRuntime.animEndTime = nowT + playDur;
+            if (!expressiveRafId) {
+                const animSlidePreview = () => {
+                    const now = g.ctx.currentTime;
+                    const rawP = (now - expressiveRuntime.animStartTime) / playDur;
+                    const p = Math.max(0, Math.min(1, (rawP - 0.14) / 0.64));
+                    document.querySelectorAll('[data-exp-slide-cursor]').forEach((cEl) => {
+                        const fx = parseFloat(cEl.getAttribute('data-from-x')) || 0;
+                        const tx = parseFloat(cEl.getAttribute('data-to-x')) || 0;
+                        cEl.setAttribute('cx', (fx + (tx - fx) * p).toFixed(2));
+                    });
+                    if (rawP < 0.95 && !state.expressiveLab.isPlaying) {
+                        requestAnimationFrame(animSlidePreview);
+                    }
+                };
+                requestAnimationFrame(animSlidePreview);
+            }
+        }
+
+        playExpressiveStepAudio(previewStep, nowT, playDur);
+        renderFretboardSVG();
+        updateExpressiveActiveStepDOM();
+    }
+
+    function triggerExpressiveStepJump(idx) {
+        stopExpressiveLab();
+        const st = state.expressiveLab;
+        const steps = getActiveExpressiveSteps();
+        if (!steps || idx < 0 || idx >= steps.length) return;
+        st.currentStepIdx = idx;
+        expressiveRuntime.lastSandboxPreview = null;
+        const step = steps[idx];
+        const tMeta = getExpressiveTechMeta(step.tech);
+        expressiveRuntime.liveStatus = `Passo ${idx + 1}: ${tMeta.shortName} (${step.lh}) — ${step.ann}`;
+        state.displayMode = 'EXPRESSIVE';
+
+        const dur = Math.max(0.55, getExpressiveStepDurationSec(step));
+        playExpressiveStepAudio(step, undefined, dur);
+        saveViolaState();
+        renderFretboardSVG();
+        updateExpressiveActiveStepDOM();
+    }
+
+    function addPreviewToExpressiveSandbox() {
+        const st = state.expressiveLab;
+        const preview = expressiveRuntime.lastSandboxPreview || getActiveExpressiveOverlayStep();
+        if (!preview) return;
+        if (!Array.isArray(st.sandboxSteps)) st.sandboxSteps = [];
+        const newIdx = st.sandboxSteps.length;
+        const nextMeasure = Math.floor(newIdx / 4) + 1;
+        const nextBeat = String((newIdx % 4) + 1);
+        const cloned = JSON.parse(JSON.stringify(preview));
+        cloned.measure = nextMeasure;
+        cloned.beat = nextBeat;
+        st.sandboxSteps.push(cloned);
+        st.customModeActive = true;
+        st.currentStepIdx = newIdx;
+        expressiveRuntime.lastSandboxPreview = null;
+        saveViolaState();
+        renderExpressiveLabSection();
+        if (state.displayMode === 'EXPRESSIVE') renderFretboardSVG();
+        if (window.showToast) window.showToast('Movimento gravado em Minha Frase Sandbox!');
+    }
+
+    function exportExpressiveToTabEditor() {
+        stopExpressiveLab();
+        const st = state.expressiveLab;
+        const ex = getActiveExpressiveExercise();
+        const steps = getActiveExpressiveSteps();
+        if (!steps || steps.length === 0) return;
+
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const beatSec = 60 / Math.max(45, st.bpm || ex.defaultBpm || 84);
+
+        const tabSteps = steps.map((step) => {
+            const tMeta = getExpressiveTechMeta(step.tech);
+            const notes = (step.pairs || []).map((pr) => ({
+                c: Math.max(0, Math.min(inst.courses.length - 1, pr.c || 0)),
+                f: Math.max(0, Math.min(14, pr.to ?? pr.from ?? 0))
+            }));
+            return {
+                measure: step.measure || 1,
+                beat: step.beat || '1',
+                notes,
+                d: Number(((step.durationBeats || 0.5) * beatSec).toFixed(3)),
+                rh: tMeta.symbol,
+                lh: step.lh || '0',
+                chord: '',
+                ann: step.ann || tMeta.shortName,
+                expressive: {
+                    tech: step.tech || 'open',
+                    pairs: JSON.parse(JSON.stringify(step.pairs || []))
+                }
+            };
+        });
+
+        if (!Array.isArray(state.tabEditor.projects)) state.tabEditor.projects = [];
+        const projTitle = st.customModeActive ? '[Técnica] Minha Frase Expressiva' : `[Técnica] ${ex.title}`;
+        const newProjId = 'expressive_' + Date.now();
+        state.tabEditor.projects.unshift({
+            id: newProjId,
+            title: projTitle,
+            author: 'Viola Studio • Fase 22',
+            instrumentId: state.instrumentId || 'viola_cebolao_e',
+            timeSignature: st.customModeActive ? '4/4' : (ex.timeSignature || '2/4'),
+            bpm: st.bpm || ex.defaultBpm || 84,
+            key: inst.shortName,
+            updatedAt: new Date().toISOString(),
+            steps: tabSteps
+        });
+        state.tabEditor.activeProjectId = newProjId;
+        state.tabEditor.currentStepIdx = 0;
+
+        state.displayMode = 'TAB_EDITOR';
+        state.activeCategoryId = 'repertorio';
+        state.activeToolId = 'editor-tab';
+        saveViolaState();
+        renderAll();
+        if (window.showToast) window.showToast('Frase expressiva exportada para o Editor de Tablaturas!');
+    }
+
+    function renderExpressiveBiomechSVG(techId, isLeftHanded) {
+        const meta = getExpressiveTechMeta(techId);
+        const col = meta.color || '#10b981';
+        const rad = ((meta.angleDeg || 80) * Math.PI) / 180;
+        const neckStartX = isLeftHanded ? 120 : 20;
+        const neckEndX = isLeftHanded ? 400 : 300;
+        const bodyZoneX = isLeftHanded ? 20 : 310;
+        const fretX = isLeftHanded ? 270 : 150;
+        const fingerBaseX = isLeftHanded ? 315 : 105;
+        const dirSign = isLeftHanded ? -1 : 1;
+        const vecX = Math.round(fretX + Math.cos(rad) * 38 * dirSign);
+        const vecY = Math.round(112 - Math.sin(rad) * 38);
+
+        return `
+            <svg viewBox="0 0 420 175" class="w-full h-auto rounded-xl bg-[#060911] border border-slate-800/90 select-none" role="img" aria-label="Diagrama vetorial de biomecânica da mão">
+                <defs>
+                    <marker id="bioVecArrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                        <polygon points="0 0, 7 3.5, 0 7" fill="${col}"/>
+                    </marker>
+                </defs>
+                <!-- Fundo esquemático escala + boca -->
+                <rect x="${neckStartX}" y="116" width="${neckEndX - neckStartX}" height="24" rx="4" fill="#131c2e" stroke="#334155" stroke-width="1.2"/>
+                <rect x="${bodyZoneX}" y="108" width="90" height="36" rx="8" fill="#0f172a" stroke="#475569" stroke-dasharray="4 3" stroke-width="1.2"/>
+                <text x="${bodyZoneX + 45}" y="130" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">BOCA / RASTILHO</text>
+
+                <!-- Traste metálico e corda -->
+                <rect x="${fretX - 2}" y="110" width="5" height="9" rx="2" fill="#cbd5e1"/>
+                <line x1="20" y1="106" x2="400" y2="106" stroke="#e2e8f0" stroke-width="2.2"/>
+
+                <!-- Polegar contraposto atrás do braço -->
+                <ellipse cx="${fretX}" cy="151" rx="20" ry="9" fill="#1e293b" stroke="#64748b" stroke-width="1.4"/>
+                <text x="${fretX}" y="154" text-anchor="middle" fill="#cbd5e1" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="700">POLEGAR</text>
+
+                <!-- Falange arqueada da mão de escala -->
+                <path d="M ${fingerBaseX} 44 Q ${(fingerBaseX + fretX) / 2} 34 ${fretX} 102" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" opacity="0.85"/>
+                <circle cx="${fretX}" cy="102" r="5" fill="#ffffff" stroke="${col}" stroke-width="2"/>
+
+                <!-- Vetor de Força / Ângulo -->
+                <line x1="${vecX}" y1="${vecY}" x2="${fretX}" y2="100" stroke="#fbbf24" stroke-width="2.2" marker-end="url(#bioVecArrow)"/>
+                <text x="${vecX}" y="${Math.max(18, vecY - 6)}" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="9" font-weight="700">${meta.angleDeg}° • ${meta.symbol}</text>
+
+                ${techId === 'art_harmonic' ? `
+                    <polygon points="${bodyZoneX + 25},97 ${bodyZoneX + 33},105 ${bodyZoneX + 25},113 ${bodyZoneX + 17},105" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+                    <text x="${bodyZoneX + 25}" y="88" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="700">NÓ L/2 (0 N)</text>
+                ` : ''}
+                ${techId === 'palm_mute' ? `
+                    <rect x="${bodyZoneX + 10}" y="92" width="54" height="16" rx="5" fill="#f43f5e" fill-opacity="0.32" stroke="#f43f5e" stroke-width="1.5"/>
+                    <text x="${bodyZoneX + 37}" y="84" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="700">PALMA (P.M.)</text>
+                ` : ''}
+
+                <!-- Legenda Canhoto / Destro -->
+                <text x="14" y="18" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="700">
+                    ${isLeftHanded ? 'ORIENTAÇÃO CANHOTO: Boca à Esquerda ← | → Escala à Direita' : 'ORIENTAÇÃO DESTRO: Escala à Esquerda ← | → Boca à Direita'}
+                </text>
+            </svg>
+        `;
+    }
+
+    function renderExpressiveBiomechCardInnerHTML(techId) {
+        const techMeta = getExpressiveTechMeta(techId);
+        const handBio = state.isLeftHanded ? techMeta.biomech.leftHanded : techMeta.biomech.rightHanded;
+        return `
+            <div class="space-y-3">
+                <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
+                    <div>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold">Biomecânica de Mão (${state.isLeftHanded ? 'Modo Canhoto' : 'Modo Destro'})</span>
+                        <h4 class="text-sm font-bold text-slate-100 mt-0.5">${techMeta.name}</h4>
+                    </div>
+                    <span class="px-2 py-0.5 text-[10px] font-mono rounded border ${techMeta.pillClass}">${techMeta.badge}</span>
+                </div>
+
+                ${renderExpressiveBiomechSVG(techMeta.id, state.isLeftHanded)}
+
+                <p class="text-xs text-slate-300 leading-relaxed">${techMeta.shortRule}</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div class="p-2.5 rounded-lg bg-[#0f172a] border border-slate-800 space-y-1">
+                        <span class="block text-[10px] font-mono font-bold text-emerald-300 uppercase">${handBio.frettingHand}</span>
+                        <p class="text-[11px] text-slate-300 leading-snug">${handBio.frettingCue}</p>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-[#0f172a] border border-slate-800 space-y-1">
+                        <span class="block text-[10px] font-mono font-bold text-cyan-300 uppercase">${handBio.pickingHand}</span>
+                        <p class="text-[11px] text-slate-300 leading-snug">${handBio.pickingCue}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-slate-800/80">
+                <div class="flex items-center justify-between text-[11px] font-mono">
+                    <span class="text-slate-400">Vetor: <strong class="text-slate-200">${techMeta.forceLabel}</strong></span>
+                    <span class="text-amber-300">${techMeta.riskLabel}</span>
+                </div>
+                <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                    <div class="h-full rounded-full transition-all duration-300" style="width:${techMeta.tensionPct}%; background:${techMeta.color};"></div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-100 leading-snug">
+                    <strong class="font-mono text-amber-300">Ergonomia &amp; Prevenção:</strong> ${handBio.postureAlert}
+                </div>
+            </div>
+        `;
+    }
+
+    function updateExpressiveTransportDOM() {
+        const playBtn = document.getElementById('btn-exp-play-toggle');
+        if (!playBtn) return;
+        const playing = Boolean(state.expressiveLab && state.expressiveLab.isPlaying);
+        playBtn.className = `min-h-[42px] px-4 py-2 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg ${
+            playing ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'
+        }`;
+        playBtn.innerHTML = `<i data-lucide="${playing ? 'square' : 'play'}" class="w-4 h-4"></i><span>${playing ? 'Parar Treino' : 'Iniciar Treino Cronometrado'}</span>`;
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }
+
+    function updateExpressiveActiveStepDOM() {
+        const st = state.expressiveLab;
+        const statusEl = document.getElementById('viola-exp-status-text');
+        if (statusEl) statusEl.textContent = expressiveRuntime.liveStatus;
+
+        const strip = document.getElementById('viola-exp-steps-strip');
+        if (strip) {
+            strip.querySelectorAll('[data-exp-step-idx]').forEach((card) => {
+                const idx = parseInt(card.getAttribute('data-exp-step-idx'), 10);
+                const isActive = !st.isCountingIn && idx === st.currentStepIdx && !expressiveRuntime.lastSandboxPreview;
+                card.classList.toggle('ring-2', isActive);
+                card.classList.toggle('ring-amber-400', isActive);
+                card.classList.toggle('border-amber-400', isActive);
+                card.classList.toggle('bg-amber-500/15', isActive);
+                if (isActive) {
+                    try { card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); } catch (_) {}
+                }
+            });
+        }
+
+        const ledEl = document.getElementById('viola-exp-beat-led');
+        if (ledEl) {
+            if (st.isCountingIn) {
+                ledEl.textContent = `COUNT-IN ${st.countInBeat}`;
+                ledEl.className = 'px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-mono text-[11px] font-bold animate-pulse';
+            } else if (st.isPlaying) {
+                ledEl.textContent = `PASSO ${st.currentStepIdx + 1}/${getActiveExpressiveSteps().length}`;
+                ledEl.className = 'px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400 text-emerald-300 font-mono text-[11px] font-bold';
+            } else {
+                ledEl.textContent = 'PRONTO';
+                ledEl.className = 'px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-mono text-[11px]';
+            }
+        }
+
+        const bioCard = document.getElementById('viola-exp-biomech-card');
+        if (bioCard) {
+            const ovStep = getActiveExpressiveOverlayStep();
+            const curTech = (ovStep && ovStep.tech) ? ovStep.tech : st.selectedTechId;
+            if (bioCard.getAttribute('data-active-tech') !== curTech) {
+                bioCard.setAttribute('data-active-tech', curTech);
+                bioCard.innerHTML = renderExpressiveBiomechCardInnerHTML(curTech);
+            }
+        }
+    }
+
+    function renderExpressiveLabSection() {
+        const container = document.getElementById('viola-expressive-lab-container');
+        if (!container) return;
+
+        const st = state.expressiveLab || DEFAULT_EXPRESSIVE_LAB_STATE;
+        const inst = INSTRUMENTS[state.instrumentId] || INSTRUMENTS.viola_cebolao_e;
+        const activeEx = getActiveExpressiveExercise();
+        const steps = getActiveExpressiveSteps();
+        const activeOverlayStep = getActiveExpressiveOverlayStep();
+        const activeTechId = activeOverlayStep && !st.isPlaying && expressiveRuntime.lastSandboxPreview
+            ? expressiveRuntime.lastSandboxPreview.tech
+            : (activeOverlayStep ? activeOverlayStep.tech : st.selectedTechId);
+
+        container.innerHTML = `
+            <div class="bg-[#0f172a] border border-emerald-500/30 rounded-xl p-4 sm:p-5 space-y-4 shadow-2xl">
+                <!-- 1. Cabeçalho & Transporte Lookahead -->
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 pb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <i data-lucide="zap" class="w-5 h-5 text-emerald-400"></i>
+                            <h3 class="text-sm sm:text-base font-bold text-slate-100 uppercase tracking-wider font-mono">Laboratório de Técnicas Expressivas Caipiras &amp; Biomecânica</h3>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Fase 22</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">${inst.shortName}</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Síntese física Web Audio de ligados (H/P), slides contínuos, trinados, harmônicos artificiais (+12) e palm mute com metrônomo Lookahead e projeção vetorial (${state.isLeftHanded ? 'Canhoto' : 'Destro'}).</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-exp-play-toggle" class="min-h-[42px] px-4 py-2 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 transition shadow-lg ${st.isPlaying ? 'bg-rose-600 hover:bg-rose-500 text-white ring-2 ring-rose-400' : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'}">
+                            <i data-lucide="${st.isPlaying ? 'square' : 'play'}" class="w-4 h-4"></i>
+                            <span>${st.isPlaying ? 'Parar Treino' : 'Iniciar Treino Cronometrado'}</span>
+                        </button>
+                        <button type="button" id="btn-exp-step-prev" title="Passo Anterior" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-mono">◀</button>
+                        <button type="button" id="btn-exp-step-next" title="Próximo Passo" class="min-h-[38px] px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-mono">▶</button>
+                        <button type="button" id="btn-exp-to-fretboard" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="eye" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>Ver Braço SVG</span>
+                        </button>
+                        <button type="button" id="btn-exp-export-tab" class="min-h-[38px] px-3 py-1.5 rounded-lg bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/40 text-violet-200 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-violet-300"></i>
+                            <span>Exportar p/ Tablatura</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Seletor de Exercícios Progressivos (8 Estudos) ou Minha Frase Sandbox -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                        <div class="inline-flex rounded-lg bg-[#090d16] border border-slate-800 p-0.5">
+                            <button type="button" id="btn-exp-mode-catalog" class="px-3 py-1 rounded-md text-xs font-bold transition ${!st.customModeActive ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-white'}">Catálogo Progressivo (8)</button>
+                            <button type="button" id="btn-exp-mode-sandbox" class="px-3 py-1 rounded-md text-xs font-bold transition ${st.customModeActive ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'}">Minha Frase Sandbox (${(st.sandboxSteps || []).length})</button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="viola-exp-beat-led" class="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-400 font-mono text-[11px]">PRONTO</span>
+                            <span id="viola-exp-status-text" class="text-[11px] text-cyan-300 truncate max-w-md">${expressiveRuntime.liveStatus}</span>
+                        </div>
+                    </div>
+
+                    ${!st.customModeActive ? `
+                        <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-2">
+                            ${EXPRESSIVE_EXERCISES_CATALOG.map((ex) => {
+                                const isSel = ex.id === activeEx.id;
+                                const tm = getExpressiveTechMeta(ex.primaryTech);
+                                return `
+                                    <button type="button" data-exp-select-ex="${ex.id}"
+                                        class="text-left p-2.5 rounded-xl border transition ${isSel ? 'bg-emerald-500/15 border-emerald-400 ring-1 ring-emerald-400/50' : 'bg-[#090d16] border-slate-800 hover:border-slate-700'}">
+                                        <div class="flex items-center justify-between gap-1 text-[9px] font-mono">
+                                            <span class="px-1.5 py-0.5 rounded border ${tm.pillClass}">${tm.symbol}</span>
+                                            <span class="text-slate-500">${ex.defaultBpm} BPM</span>
+                                        </div>
+                                        <div class="text-[11px] font-bold text-slate-100 mt-1 line-clamp-2 leading-tight">${ex.title}</div>
+                                        <div class="text-[9px] font-mono text-slate-400 mt-1 truncate">${ex.level}</div>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- 3. Corpo em Duas Colunas: Esquerda (Régua Cronometrada + Sandbox) | Direita (Biomecânica de Mão) -->
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                    <!-- Coluna Esquerda (7 cols) -->
+                    <div class="xl:col-span-7 space-y-3">
+                        <!-- Painel do Metrônomo Lookahead & Velocidade Progressiva -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-slate-400">Metrônomo Lookahead:</span>
+                                    <strong id="viola-exp-bpm-lbl" class="text-cyan-300 text-sm">${st.bpm} BPM</strong>
+                                    <button type="button" data-exp-bpm-delta="-4" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200">−4</button>
+                                    <button type="button" data-exp-bpm-delta="4" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200">+4</button>
+                                </div>
+                                <div class="inline-flex rounded-lg bg-[#0f172a] border border-slate-800 p-0.5">
+                                    ${[0.5, 0.75, 1.0, 1.2].map((spd) => `
+                                        <button type="button" data-exp-speed="${spd}" class="px-2 py-0.5 rounded text-[10px] font-bold transition ${Math.abs((st.speedMultiplier || 1) - spd) < 0.05 ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-white'}">${Math.round(spd * 100)}%</button>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <input type="range" id="viola-exp-bpm-slider" min="45" max="180" step="1" value="${st.bpm}" class="w-full accent-emerald-400 cursor-pointer">
+
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-300">
+                                <div class="flex flex-wrap items-center gap-3">
+                                    <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                        <input type="checkbox" id="chk-exp-loop" ${st.isLooping ? 'checked' : ''} class="accent-emerald-400">
+                                        <span>Loop</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                        <input type="checkbox" id="chk-exp-countin" ${st.countInEnabled ? 'checked' : ''} class="accent-amber-400">
+                                        <span>Count-In</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                                        <input type="checkbox" id="chk-exp-click" ${st.clickEnabled ? 'checked' : ''} class="accent-cyan-400">
+                                        <span>Clique Guia</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 cursor-pointer text-amber-300" title="Aumenta +4 BPM automaticamente a cada repetição completa do ciclo">
+                                        <input type="checkbox" id="chk-exp-ramp" ${st.speedRampEnabled ? 'checked' : ''} class="accent-amber-400">
+                                        <span>+4 BPM/Ciclo (até ${st.speedRampMax || 132})</span>
+                                    </label>
+                                </div>
+                                <span class="text-slate-500">${st.customModeActive ? 'Frase Livre' : `${activeEx.timeSignature} • ${activeEx.badge}`}</span>
+                            </div>
+                        </div>
+
+                        <!-- Régua Cronometrada Interativa dos Passos -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-2">
+                            <div class="flex items-center justify-between gap-2 text-xs font-mono">
+                                <span class="text-slate-200 font-bold uppercase tracking-wider">Partitura Expressiva (${steps.length} Passos)</span>
+                                ${st.customModeActive ? `
+                                    <button type="button" id="btn-exp-clear-sandbox" class="px-2 py-0.5 rounded bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/40 text-rose-300 text-[10px]">Limpar Frase</button>
+                                ` : `
+                                    <span class="text-[10px] text-slate-400">Clique em qualquer card para ouvir e projetar vetor no braço</span>
+                                `}
+                            </div>
+
+                            <div id="viola-exp-steps-strip" class="flex items-stretch gap-2 overflow-x-auto pb-1">
+                                ${steps.map((step, idx) => {
+                                    const tm = getExpressiveTechMeta(step.tech);
+                                    const isCur = !st.isCountingIn && idx === st.currentStepIdx && !expressiveRuntime.lastSandboxPreview;
+                                    const notesLabel = formatExpressiveStepNotes(step, inst);
+                                    return `
+                                        <div data-exp-step-idx="${idx}" class="shrink-0 w-36 p-2.5 rounded-xl border cursor-pointer transition select-none flex flex-col justify-between gap-1.5 ${isCur ? 'bg-amber-500/15 border-amber-400 ring-2 ring-amber-400' : 'bg-[#0b1220] border-slate-800 hover:border-slate-600'}">
+                                            <div class="flex items-center justify-between gap-1 text-[10px] font-mono">
+                                                <span class="px-1.5 py-0.5 rounded font-bold border ${tm.pillClass}">${tm.symbol} ${tm.shortName}</span>
+                                                <span class="text-slate-500">C${step.measure || 1}.${step.beat || '1'}</span>
+                                            </div>
+                                            <div class="text-sm font-mono font-extrabold text-slate-100">${step.lh || '—'}</div>
+                                            <div class="text-[10px] font-mono text-cyan-300 truncate" title="${notesLabel}">${notesLabel}</div>
+                                            <div class="text-[10px] text-slate-400 line-clamp-2 leading-tight">${step.ann || ''}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Bancada Sandbox / Disparo Direto no Braço SVG -->
+                        <div class="bg-[#090d16] border border-slate-800 rounded-xl p-3 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    <span class="text-xs font-mono font-bold uppercase text-amber-300">Disparo Interativo no Braço SVG (Sandbox)</span>
+                                    <p class="text-[11px] text-slate-400">Escolha uma técnica abaixo e clique em qualquer casa do braço SVG acima para soar com síntese física e projeção vetorial.</p>
+                                </div>
+                                <button type="button" id="btn-exp-add-sandbox" class="min-h-[34px] px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono text-[11px] font-bold flex items-center gap-1 transition">
+                                    <span>+ Gravar na Minha Frase</span>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+                                ${Object.values(EXPRESSIVE_TECHNIQUES_CATALOG).map((tm) => {
+                                    const active = st.selectedTechId === tm.id;
+                                    return `
+                                        <button type="button" data-exp-pick-tech="${tm.id}"
+                                            class="p-2 rounded-lg border text-center font-mono transition ${active ? 'bg-slate-800 border-amber-400 ring-1 ring-amber-400/60 text-white' : 'bg-[#070b12] border-slate-800 text-slate-400 hover:text-white'}">
+                                            <span class="block text-xs font-extrabold" style="color:${tm.color}">${tm.symbol}</span>
+                                            <span class="block text-[10px] truncate mt-0.5">${tm.shortName}</span>
+                                        </button>
+                                    `;
+                                }).join('')}
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] font-mono">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="text-slate-400">Alcance do Movimento:</span>
+                                    ${[
+                                        { val: 1, lbl: '+1 Casa (½ Tom)' },
+                                        { val: 2, lbl: '+2 Casas (1 Tom)' },
+                                        { val: 3, lbl: '+3 Casas (3ªm)' },
+                                        { val: -2, lbl: '−2 Casas' },
+                                        { val: 'to_open', lbl: 'Para Solta (0)' }
+                                    ].map((opt) => {
+                                        const isOpt = String(st.sandboxInterval) === String(opt.val);
+                                        return `<button type="button" data-exp-sandbox-iv="${opt.val}" class="px-2 py-1 rounded border transition ${isOpt ? 'bg-cyan-500/20 border-cyan-400 text-cyan-200 font-bold' : 'bg-[#070b12] border-slate-800 text-slate-400 hover:text-white'}">${opt.lbl}</button>`;
+                                    }).join('')}
+                                </div>
+                                <label class="inline-flex items-center gap-1.5 text-emerald-300 cursor-pointer">
+                                    <input type="checkbox" id="chk-exp-sandbox-duad" ${st.sandboxDuad ? 'checked' : ''} class="accent-emerald-400">
+                                    <span>Dueto Paralelo</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita (5 cols): Biomecânica de Mão Canhoto/Destro & Vetores -->
+                    <div id="viola-exp-biomech-card" data-active-tech="${activeTechId}" class="xl:col-span-5 bg-[#090d16] border border-slate-800 rounded-xl p-3.5 space-y-3 flex flex-col justify-between">
+                        ${renderExpressiveBiomechCardInnerHTML(activeTechId)}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+        bindExpressiveLabEvents();
+    }
+
+    function bindExpressiveLabEvents() {
+        const st = state.expressiveLab;
+
+        const playBtn = document.getElementById('btn-exp-play-toggle');
+        if (playBtn) playBtn.addEventListener('click', startExpressivePlayback);
+
+        const prevBtn = document.getElementById('btn-exp-step-prev');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                const steps = getActiveExpressiveSteps();
+                const prev = (st.currentStepIdx - 1 + steps.length) % steps.length;
+                triggerExpressiveStepJump(prev);
+            });
+        }
+
+        const nextBtn = document.getElementById('btn-exp-step-next');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                const steps = getActiveExpressiveSteps();
+                const next = (st.currentStepIdx + 1) % steps.length;
+                triggerExpressiveStepJump(next);
+            });
+        }
+
+        const toFretBtn = document.getElementById('btn-exp-to-fretboard');
+        if (toFretBtn) {
+            toFretBtn.addEventListener('click', () => {
+                state.displayMode = 'EXPRESSIVE';
+                state.fretboardDockMode = 'show';
+                saveViolaState();
+                renderAll();
+                const wrap = document.getElementById('viola-fretboard-svg-wrap');
+                if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        }
+
+        const expTabBtn = document.getElementById('btn-exp-export-tab');
+        if (expTabBtn) expTabBtn.addEventListener('click', exportExpressiveToTabEditor);
+
+        const catModeBtn = document.getElementById('btn-exp-mode-catalog');
+        if (catModeBtn) {
+            catModeBtn.addEventListener('click', () => {
+                stopExpressiveLab();
+                st.customModeActive = false;
+                st.currentStepIdx = 0;
+                expressiveRuntime.lastSandboxPreview = null;
+                saveViolaState();
+                renderExpressiveLabSection();
+                if (state.displayMode === 'EXPRESSIVE') renderFretboardSVG();
+            });
+        }
+
+        const sandModeBtn = document.getElementById('btn-exp-mode-sandbox');
+        if (sandModeBtn) {
+            sandModeBtn.addEventListener('click', () => {
+                stopExpressiveLab();
+                st.customModeActive = true;
+                st.currentStepIdx = 0;
+                expressiveRuntime.lastSandboxPreview = null;
+                saveViolaState();
+                renderExpressiveLabSection();
+                if (state.displayMode === 'EXPRESSIVE') renderFretboardSVG();
+            });
+        }
+
+        document.querySelectorAll('[data-exp-select-ex]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-exp-select-ex');
+                const ex = EXPRESSIVE_EXERCISES_CATALOG.find((item) => item.id === id);
+                if (!ex) return;
+                stopExpressiveLab();
+                st.activeExerciseId = ex.id;
+                st.customModeActive = false;
+                st.bpm = ex.defaultBpm || 84;
+                st.selectedTechId = ex.primaryTech || 'hammer_on';
+                st.currentStepIdx = 0;
+                expressiveRuntime.lastSandboxPreview = null;
+                expressiveRuntime.liveStatus = `Estudo carregado: ${ex.title} (${ex.defaultBpm} BPM).`;
+                state.displayMode = 'EXPRESSIVE';
+                saveViolaState();
+                renderExpressiveLabSection();
+                renderFretboardSVG();
+            });
+        });
+
+        const bpmSlider = document.getElementById('viola-exp-bpm-slider');
+        if (bpmSlider) {
+            bpmSlider.addEventListener('input', () => {
+                st.bpm = Math.max(45, Math.min(180, parseInt(bpmSlider.value, 10) || 84));
+                const lbl = document.getElementById('viola-exp-bpm-lbl');
+                if (lbl) lbl.textContent = `${st.bpm} BPM`;
+            });
+            bpmSlider.addEventListener('change', saveViolaState);
+        }
+
+        document.querySelectorAll('[data-exp-bpm-delta]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const delta = parseInt(btn.getAttribute('data-exp-bpm-delta'), 10) || 0;
+                st.bpm = Math.max(45, Math.min(180, (st.bpm || 84) + delta));
+                if (bpmSlider) bpmSlider.value = String(st.bpm);
+                const lbl = document.getElementById('viola-exp-bpm-lbl');
+                if (lbl) lbl.textContent = `${st.bpm} BPM`;
+                saveViolaState();
+            });
+        });
+
+        document.querySelectorAll('[data-exp-speed]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                st.speedMultiplier = parseFloat(btn.getAttribute('data-exp-speed')) || 1.0;
+                saveViolaState();
+                renderExpressiveLabSection();
+            });
+        });
+
+        const bindChk = (id, key) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('change', () => {
+                st[key] = el.checked;
+                saveViolaState();
+            });
+        };
+        bindChk('chk-exp-loop', 'isLooping');
+        bindChk('chk-exp-countin', 'countInEnabled');
+        bindChk('chk-exp-click', 'clickEnabled');
+        bindChk('chk-exp-ramp', 'speedRampEnabled');
+        bindChk('chk-exp-sandbox-duad', 'sandboxDuad');
+
+        document.querySelectorAll('[data-exp-step-idx]').forEach((card) => {
+            card.addEventListener('click', () => {
+                const idx = parseInt(card.getAttribute('data-exp-step-idx'), 10);
+                triggerExpressiveStepJump(idx);
+            });
+        });
+
+        document.querySelectorAll('[data-exp-pick-tech]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                st.selectedTechId = btn.getAttribute('data-exp-pick-tech');
+                expressiveRuntime.lastSandboxPreview = null;
+                state.displayMode = 'EXPRESSIVE';
+                saveViolaState();
+                renderExpressiveLabSection();
+                renderFretboardSVG();
+            });
+        });
+
+        document.querySelectorAll('[data-exp-sandbox-iv]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const raw = btn.getAttribute('data-exp-sandbox-iv');
+                st.sandboxInterval = raw === 'to_open' ? 'to_open' : parseInt(raw, 10);
+                saveViolaState();
+                renderExpressiveLabSection();
+            });
+        });
+
+        const addSandBtn = document.getElementById('btn-exp-add-sandbox');
+        if (addSandBtn) addSandBtn.addEventListener('click', addPreviewToExpressiveSandbox);
+
+        const clearSandBtn = document.getElementById('btn-exp-clear-sandbox');
+        if (clearSandBtn) {
+            clearSandBtn.addEventListener('click', () => {
+                stopExpressiveLab();
+                st.sandboxSteps = [];
+                st.currentStepIdx = 0;
+                saveViolaState();
+                renderExpressiveLabSection();
+                if (state.displayMode === 'EXPRESSIVE') renderFretboardSVG();
+            });
+        }
+    }
+
     let tunerOsc = null;
     let tunerGain = null;
     let activeTunerCourse = null;
@@ -26931,6 +28709,95 @@ function bindSolfegeEvents() {
                         }
                     });
                 }
+            } else if (state.displayMode === 'EXPRESSIVE') {
+                // FASE 22: Técnicas Expressivas Caipiras (Ligados, Slides, Trinados, Harmônicos +12 e Palm Mute)
+                const expSteps = getActiveExpressiveSteps();
+                const curExpStep = getActiveExpressiveOverlayStep();
+                const activeKeys = new Set();
+                if (curExpStep && Array.isArray(curExpStep.pairs)) {
+                    curExpStep.pairs.forEach((pr) => {
+                        activeKeys.add(`${pr.c}_${pr.from}`);
+                        activeKeys.add(`${pr.c}_${pr.to}`);
+                    });
+                }
+
+                // 1. Fantasmas da frase completa
+                const ghostSeen = new Set();
+                expSteps.forEach((stItem) => {
+                    (stItem.pairs || []).forEach((pr) => {
+                        [pr.from, pr.to].forEach((fVal) => {
+                            if (pr.c < numCourses && fVal >= 0 && fVal <= maxFret) {
+                                const key = `${pr.c}_${fVal}`;
+                                if (!ghostSeen.has(key) && !activeKeys.has(key)) {
+                                    ghostSeen.add(key);
+                                    const pc = (inst.courses[pr.c].pitchClass + fVal) % 12;
+                                    activeMarkers.push({
+                                        courseIdx: pr.c,
+                                        fret: fVal,
+                                        label: NOTE_NAMES[pc],
+                                        sub: `${pr.c + 1}ºP`,
+                                        color: '#64748b',
+                                        opacity: '0.32'
+                                    });
+                                }
+                            }
+                        });
+                    });
+                });
+
+                // 2. Marcadores destacados do movimento ativo
+                if (curExpStep && Array.isArray(curExpStep.pairs)) {
+                    const tm = getExpressiveTechMeta(curExpStep.tech);
+                    curExpStep.pairs.forEach((pr) => {
+                        if (pr.c >= numCourses) return;
+                        const pcFrom = (inst.courses[pr.c].pitchClass + pr.from) % 12;
+                        const pcTo = (inst.courses[pr.c].pitchClass + pr.to) % 12;
+                        if (curExpStep.tech === 'art_harmonic') {
+                            activeMarkers.push({
+                                courseIdx: pr.c,
+                                fret: pr.from,
+                                label: NOTE_NAMES[pcFrom],
+                                sub: 'DEDO',
+                                color: '#10b981',
+                                stroke: '#ffffff',
+                                strokeWidth: 2.8,
+                                opacity: '1'
+                            });
+                        } else if (pr.from !== pr.to) {
+                            activeMarkers.push({
+                                courseIdx: pr.c,
+                                fret: pr.from,
+                                label: NOTE_NAMES[pcFrom],
+                                sub: 'SAÍDA',
+                                color: '#cbd5e1',
+                                stroke: tm.color,
+                                strokeWidth: 2.4,
+                                opacity: '0.92'
+                            });
+                            activeMarkers.push({
+                                courseIdx: pr.c,
+                                fret: pr.to,
+                                label: NOTE_NAMES[pcTo],
+                                sub: tm.symbol,
+                                color: tm.color,
+                                stroke: '#ffffff',
+                                strokeWidth: 3.0,
+                                opacity: '1'
+                            });
+                        } else {
+                            activeMarkers.push({
+                                courseIdx: pr.c,
+                                fret: pr.from,
+                                label: NOTE_NAMES[pcFrom],
+                                sub: tm.symbol,
+                                color: tm.color,
+                                stroke: '#ffffff',
+                                strokeWidth: 2.8,
+                                opacity: '1'
+                            });
+                        }
+                    });
+                }
             }
 
         // Construção SVG
@@ -26938,7 +28805,7 @@ function bindSolfegeEvents() {
         let capoDeadZoneSvg = '';
         let capoClampSvg = '';
         const capoK = state.capoDuo.capoFret || 0;
-        if (capoK > 0 && capoK <= maxFret && state.displayMode !== 'IMPROVISO') {
+        if (capoK > 0 && capoK <= maxFret && state.displayMode !== 'IMPROVISO' && state.displayMode !== 'EXPRESSIVE') {
             const fretX = getFretLineX(capoK);
             let deadX, deadW, clampX, knobX;
 
@@ -27057,6 +28924,97 @@ function bindSolfegeEvents() {
             `;
         });
 
+        // Camada Vetorial Animada para Técnicas Expressivas (Fase 22)
+        let expressiveOverlaySvg = '';
+        let expressiveArrowColor = '#10b981';
+        if (state.displayMode === 'EXPRESSIVE') {
+            const curExpStep = getActiveExpressiveOverlayStep();
+            if (curExpStep && Array.isArray(curExpStep.pairs)) {
+                const tm = getExpressiveTechMeta(curExpStep.tech);
+                expressiveArrowColor = tm.color || '#10b981';
+                let hasPalmMute = curExpStep.tech === 'palm_mute';
+
+                curExpStep.pairs.forEach((pr, pIdx) => {
+                    if (pr.c >= numCourses) return;
+                    const x1 = getCellCenterX(pr.from);
+                    const x2 = getCellCenterX(pr.to);
+                    const y = getRowY(pr.c);
+                    const arcDir = (pr.c === 0 && state.viewPerspective === 'diagram') ? 1 : -1;
+
+                    if ((curExpStep.tech === 'hammer_on' || curExpStep.tech === 'pull_off') && pr.from !== pr.to) {
+                        const midX = (x1 + x2) / 2;
+                        const ctrlY = y + arcDir * 30;
+                        const lblY = y + arcDir * 24;
+                        expressiveOverlaySvg += `
+                            <g class="pointer-events-none">
+                                <path d="M ${x1} ${y - arcDir * 9} Q ${midX} ${ctrlY} ${x2} ${y - arcDir * 9}" fill="none" stroke="#090d16" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+                                <path d="M ${x1} ${y - arcDir * 9} Q ${midX} ${ctrlY} ${x2} ${y - arcDir * 9}" fill="none" stroke="${tm.color}" stroke-width="2.6" stroke-linecap="round" marker-end="url(#expArrowTech)"/>
+                                <rect x="${midX - 18}" y="${lblY - 8}" width="36" height="14" rx="4" fill="#090d16" stroke="${tm.color}" stroke-width="1"/>
+                                <text x="${midX}" y="${lblY + 2}" text-anchor="middle" fill="${tm.color}" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="800">${tm.symbol} ${pr.from}→${pr.to}</text>
+                            </g>
+                        `;
+                    } else if (curExpStep.tech === 'slide' && pr.from !== pr.to) {
+                        const midX = (x1 + x2) / 2;
+                        const lblY = y + arcDir * 21;
+                        expressiveOverlaySvg += `
+                            <g class="pointer-events-none">
+                                <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#090d16" stroke-width="6" stroke-linecap="round" opacity="0.75"/>
+                                <line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5 3" marker-end="url(#expArrowSlide)"/>
+                                <circle data-exp-slide-cursor="${pIdx}" data-from-x="${x1}" data-to-x="${x2}" cx="${x1}" cy="${y}" r="8.5" fill="#fbbf24" stroke="#ffffff" stroke-width="2.2" opacity="0.95"/>
+                                <rect x="${midX - 20}" y="${lblY - 8}" width="40" height="14" rx="4" fill="#090d16" stroke="#f59e0b" stroke-width="1"/>
+                                <text x="${midX}" y="${lblY + 2}" text-anchor="middle" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="800">S ${pr.from}/${pr.to}</text>
+                            </g>
+                        `;
+                    } else if (curExpStep.tech === 'trill' && pr.from !== pr.to) {
+                        const midX = (x1 + x2) / 2;
+                        const wzY = y + arcDir * 19;
+                        const dx = (x2 - x1) / 4;
+                        expressiveOverlaySvg += `
+                            <g class="pointer-events-none">
+                                <path d="M ${x1} ${wzY} Q ${x1 + dx * 0.5} ${wzY - 9} ${x1 + dx} ${wzY} T ${x1 + dx * 2} ${wzY} T ${x1 + dx * 3} ${wzY} T ${x2} ${wzY}" fill="none" stroke="#a855f7" stroke-width="2.4" stroke-linecap="round"/>
+                                <rect x="${midX - 18}" y="${wzY + arcDir * 13 - 7}" width="36" height="13" rx="4" fill="#090d16" stroke="#a855f7" stroke-width="1"/>
+                                <text x="${midX}" y="${wzY + arcDir * 13 + 2.5}" text-anchor="middle" fill="#d8b4fe" font-family="JetBrains Mono, monospace" font-size="8" font-weight="800">tr ${pr.from}⇄${pr.to}</text>
+                            </g>
+                        `;
+                    } else if (curExpStep.tech === 'art_harmonic') {
+                        const nodeFret = pr.from + 12;
+                        if (nodeFret <= maxFret) {
+                            const xNode = getCellCenterX(nodeFret);
+                            expressiveOverlaySvg += `
+                                <g class="pointer-events-none">
+                                    <line x1="${x1}" y1="${y}" x2="${xNode}" y2="${y}" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" opacity="0.8"/>
+                                    <polygon points="${xNode},${y - 13} ${xNode + 13},${y} ${xNode},${y + 13} ${xNode - 13},${y}" fill="#38bdf8" stroke="#ffffff" stroke-width="2.2"/>
+                                    <text x="${xNode}" y="${y + 3}" text-anchor="middle" fill="#090d16" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="900">+12</text>
+                                    <rect x="${xNode - 24}" y="${y + arcDir * 22 - 7}" width="48" height="13" rx="4" fill="#090d16" stroke="#38bdf8" stroke-width="1"/>
+                                    <text x="${xNode}" y="${y + arcDir * 22 + 2.5}" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono, monospace" font-size="8" font-weight="700">NÓ ${nodeFret}ª</text>
+                                </g>
+                            `;
+                        } else {
+                            const edgeX = bodyEndX;
+                            expressiveOverlaySvg += `
+                                <g class="pointer-events-none">
+                                    <line x1="${x1}" y1="${y}" x2="${edgeX}" y2="${y}" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" opacity="0.8"/>
+                                    <rect x="${edgeX - 28}" y="${y - 9}" width="56" height="18" rx="4" fill="#090d16" stroke="#38bdf8" stroke-width="1.2"/>
+                                    <text x="${edgeX}" y="${y + 3}" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="800">◇ ${nodeFret}ª</text>
+                                </g>
+                            `;
+                        }
+                    }
+                });
+
+                if (hasPalmMute) {
+                    const pmRectX = state.isLeftHanded ? (bodyEndX - 22) : (bodyEndX + 2);
+                    const pmLabelX = pmRectX + 10;
+                    expressiveOverlaySvg += `
+                        <g class="pointer-events-none">
+                            <rect x="${pmRectX}" y="${topY - 8}" width="20" height="${botY - topY + 16}" rx="6" fill="#f43f5e" fill-opacity="0.28" stroke="#f43f5e" stroke-width="1.6" stroke-dasharray="3 2"/>
+                            <text x="${pmLabelX}" y="${(topY + botY) / 2}" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono, monospace" font-size="8.5" font-weight="800" transform="rotate(-90 ${pmLabelX} ${(topY + botY) / 2})">PALM MUTE (RASTILHO)</text>
+                        </g>
+                    `;
+                }
+            }
+        }
+
         // Camada interativa clicável em TODAS as cordas x casas (0..14)
         let hitAreasSvg = '';
         inst.courses.forEach((c, cIdx) => {
@@ -27092,6 +29050,12 @@ function bindSolfegeEvents() {
                     <pattern id="deadZonePattern" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
                         <line x1="0" y1="0" x2="0" y2="10" stroke="#334155" stroke-width="1.5" />
                     </pattern>
+                    <marker id="expArrowTech" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                        <polygon points="0 0, 7 3.5, 0 7" fill="${expressiveArrowColor}"/>
+                    </marker>
+                    <marker id="expArrowSlide" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                        <polygon points="0 0, 7 3.5, 0 7" fill="#f59e0b"/>
+                    </marker>
                 </defs>
                 <rect x="${rectX}" y="${topY - 10}" width="${rectW}" height="${botY - topY + 20}" rx="4" fill="url(#woodGrad)" stroke="#1e293b" stroke-width="1.5"/>
                 ${inlaysSvg}
@@ -27101,6 +29065,7 @@ function bindSolfegeEvents() {
                 ${stringsSvg}
                 ${capoClampSvg}
                 ${markersSvg}
+                ${expressiveOverlaySvg}
                 ${hitAreasSvg}
                 <text x="${svgW / 2}" y="${svgH - 10}" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="10.5">${dirText}</text>
             </svg>
@@ -27122,6 +29087,10 @@ function bindSolfegeEvents() {
                 }
                 if (state.displayMode === 'IMPROVISO') {
                     handleImprovFretboardHit(cIdx, f);
+                    return;
+                }
+                if (state.displayMode === 'EXPRESSIVE') {
+                    handleExpressiveFretboardClick(cIdx, f);
                     return;
                 }
                 playCourseAtFret(cIdx, f, 0);
@@ -27795,6 +29764,22 @@ function bindSolfegeEvents() {
             } else {
                 state.improvStudio = JSON.parse(JSON.stringify(DEFAULT_IMPROV_STUDIO_STATE));
             }
+
+            if (saved.expressiveLab && typeof saved.expressiveLab === 'object') {
+                const defaultSandbox = JSON.parse(JSON.stringify(DEFAULT_EXPRESSIVE_LAB_STATE.sandboxSteps));
+                const savedSandbox = Array.isArray(saved.expressiveLab.sandboxSteps)
+                    ? saved.expressiveLab.sandboxSteps
+                    : defaultSandbox;
+                state.expressiveLab = Object.assign({}, DEFAULT_EXPRESSIVE_LAB_STATE, saved.expressiveLab, {
+                    isPlaying: false,
+                    isCountingIn: false,
+                    countInBeat: 0,
+                    currentStepIdx: 0,
+                    sandboxSteps: savedSandbox
+                });
+            } else {
+                state.expressiveLab = JSON.parse(JSON.stringify(DEFAULT_EXPRESSIVE_LAB_STATE));
+            }
         }
     }
 
@@ -27919,6 +29904,13 @@ function bindSolfegeEvents() {
                 tracks: cleanTracks
             });
         }
+        if (copy.expressiveLab) {
+            copy.expressiveLab = Object.assign({}, copy.expressiveLab, {
+                isPlaying: false,
+                isCountingIn: false,
+                countInBeat: 0
+            });
+        }
         C.store.set(C.STORAGE_KEYS.VIOLA, copy);
     }
 
@@ -27960,7 +29952,7 @@ function bindSolfegeEvents() {
             shortLabel: 'Ritmos & Estúdio',
             icon: 'activity',
             accent: 'rose',
-            desc: 'Caixa de ritmos caipiras, metrônomo lookahead, escalas modais, backing tracks e looper polifônico de 4 pistas.'
+            desc: 'Caixa de ritmos caipiras, metrônomo lookahead, escalas modais, backing tracks, looper 4 pistas e técnicas expressivas.'
         },
         {
             id: 'lutheria',
@@ -28156,7 +30148,7 @@ function bindSolfegeEvents() {
             desc: 'Síntese vocal com formantes F1/F2, 12 intervalos do sertão e ditado melódico com 10 clássicos.'
         },
 
-        // 4. RITMOS, MODOS & IMPROVISO (3)
+        // 4. RITMOS, MODOS & IMPROVISO (4)
         {
             id: 'improviso-looper',
             categoryId: 'ritmos',
@@ -28167,6 +30159,17 @@ function bindSolfegeEvents() {
             fretboardMode: 'IMPROVISO',
             defaultShowFretboard: true,
             desc: 'Bases caipiras em tempo real (Cururu, Pagode, Toada, Guarânia), looper polifônico de 4 pistas e guia modal/duado dinâmico.'
+        },
+        {
+            id: 'tecnicas-expressivas',
+            categoryId: 'ritmos',
+            title: 'Laboratório de Técnicas Expressivas Caipiras & Biomecânica',
+            shortTitle: 'Técnicas Expressivas',
+            badge: 'Fase 22',
+            icon: 'zap',
+            fretboardMode: 'EXPRESSIVE',
+            defaultShowFretboard: true,
+            desc: 'Síntese Web Audio de ligados (H/P), slides contínuos, trinados, harmônicos artificiais (+12) e palm mute com metrônomo Lookahead.'
         },
         {
             id: 'metronomo-ritmos',
@@ -28256,7 +30259,8 @@ function bindSolfegeEvents() {
         PAGODE: 'pagode',
         STROBE: 'estroboscopico',
         STAGE_EQ: 'captacao-palco',
-        IMPROVISO: 'improviso-looper'
+        IMPROVISO: 'improviso-looper',
+        EXPRESSIVE: 'tecnicas-expressivas'
     };
 
     let lastSyncedDisplayMode = null;
@@ -28344,6 +30348,9 @@ function bindSolfegeEvents() {
                 break;
             case 'improviso-looper':
                 renderImprovisoLooperSection();
+                break;
+            case 'tecnicas-expressivas':
+                renderExpressiveLabSection();
                 break;
         }
     }
@@ -28736,6 +30743,7 @@ function bindSolfegeEvents() {
                                     <button type="button" id="btn-viola-mode-strobe" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔬 Estrobo</button>
                                     <button type="button" id="btn-viola-mode-stage-eq" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🎚️ Palco EQ</button>
                                     <button type="button" id="btn-viola-mode-improviso" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">🔁 Improviso 4P</button>
+                                    <button type="button" id="btn-viola-mode-expressive" class="px-2 py-0.5 text-[11px] font-mono rounded font-semibold transition text-slate-400 hover:text-slate-200">⚡ Expressivas</button>
                                 </div>
                             </div>
                             ${isStandalonePage ? `
@@ -29091,6 +31099,11 @@ function bindSolfegeEvents() {
                     <div data-viola-tool-panel="improviso-looper">
                         <div id="viola-improviso-looper-container" class="space-y-4"></div>
                     </div>
+
+                    <!-- [24] Laboratório de Técnicas Expressivas Caipiras & Biomecânica (Fase 22) -->
+                    <div data-viola-tool-panel="tecnicas-expressivas">
+                        <div id="viola-expressive-lab-container" class="space-y-4"></div>
+                    </div>
                 </div>
 
                 <!-- 3. MODAL DE CATÁLOGO RÁPIDO DAS 23 FERRAMENTAS (Ctrl+K) -->
@@ -29209,7 +31222,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-pagode', mode: 'PAGODE', activeClass: 'bg-amber-600 text-slate-950 shadow' },
             { id: 'btn-viola-mode-strobe', mode: 'STROBE', activeClass: 'bg-cyan-500 text-slate-950 shadow' },
             { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ', activeClass: 'bg-emerald-500 text-slate-950 shadow' },
-            { id: 'btn-viola-mode-improviso', mode: 'IMPROVISO', activeClass: 'bg-amber-500 text-slate-950 shadow' }
+            { id: 'btn-viola-mode-improviso', mode: 'IMPROVISO', activeClass: 'bg-amber-500 text-slate-950 shadow' },
+            { id: 'btn-viola-mode-expressive', mode: 'EXPRESSIVE', activeClass: 'bg-emerald-500 text-slate-950 shadow' }
         ];
 
         modeButtons.forEach((b) => {
@@ -29254,6 +31268,7 @@ function bindSolfegeEvents() {
         stopStrobeTunerAudio();
         stopStageAudio();
         stopImprovStudio();
+        stopExpressiveLab();
     }
 
     function bindEvents() {
@@ -29435,7 +31450,8 @@ function bindSolfegeEvents() {
             { id: 'btn-viola-mode-pagode', mode: 'PAGODE' },
             { id: 'btn-viola-mode-strobe', mode: 'STROBE' },
             { id: 'btn-viola-mode-stage-eq', mode: 'STAGE_EQ' },
-            { id: 'btn-viola-mode-improviso', mode: 'IMPROVISO' }
+            { id: 'btn-viola-mode-improviso', mode: 'IMPROVISO' },
+            { id: 'btn-viola-mode-expressive', mode: 'EXPRESSIVE' }
         ];
 
         modeList.forEach((item) => {
@@ -29704,14 +31720,23 @@ function bindSolfegeEvents() {
             metroToggleBtn.addEventListener('click', toggleMetronome);
         }
 
-        // Atalhos de teclado dedicados para Improviso & Looper 4 Pistas (1–8, Q, W, Espaço)
+        // Atalhos de teclado dedicados para Improviso & Looper 4 Pistas (1–8, Q, W, Espaço) e Lab Expressivo (Espaço)
         document.addEventListener('keydown', (e) => {
-            if (state.activeToolId !== 'improviso-looper') return;
             if (e.ctrlKey || e.altKey || e.metaKey) return;
             const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
             if (tag === 'input' || tag === 'textarea' || tag === 'select' || (e.target && e.target.isContentEditable)) return;
 
             const k = (e.key || '').toLowerCase();
+            if (state.activeToolId === 'tecnicas-expressivas' && k === ' ') {
+                e.preventDefault();
+                if (tag === 'button' && e.target && typeof e.target.blur === 'function') {
+                    e.target.blur();
+                }
+                startExpressivePlayback();
+                return;
+            }
+            if (state.activeToolId !== 'improviso-looper') return;
+
             if (k >= '1' && k <= '8') {
                 e.preventDefault();
                 triggerImprovScalePad(parseInt(k, 10) - 1);
@@ -29809,6 +31834,7 @@ function bindSolfegeEvents() {
         renderStrobeTunerSection();
         renderStageEqSection();
         renderImprovisoLooperSection();
+        renderExpressiveLabSection();
         renderMetronomeControls();
     }
 

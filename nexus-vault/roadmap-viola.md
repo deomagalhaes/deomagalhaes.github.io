@@ -7,13 +7,13 @@ Este documento registra o backlog de projetos, histórico de implementações e 
 
 ---
 
-## 🎯 Projeto Prioritário Atual: Fase 22 — Laboratório de Técnicas Expressivas Caipiras (Ligados, Arrastes/Slides, Harmônicos Artificiais & Biomecânica de Mão)
+## 🎯 Projeto Prioritário Atual: Fase 23 — Estúdio de Rasqueados, Repiques & Levadas Regionais (Síntese Direcional de Dedilhados & Captura Rítmica)
 
 - **Status:** ⏳ Próximo na esteira diária
 - **Objetivos Técnicos:**
-  1. Motor de síntese física Web Audio API para *hammer-on*, *pull-off*, *slide* contínuo (`exponentialRampToValueAtTime`), *trinado*, *harmônico artificial de oitava* e *abafado de palma* nos 5 pares da viola e 6 cordas do violão.
-  2. Exercícios progressivos cronometrados com metrônomo Lookahead e projeção vetorial animada de setas/ligaduras sobre o braço SVG Canhoto/Destro.
-  3. Exportação direta de frases técnicas para o Editor de Tablaturas (Fase 7).
+  1. Motor de síntese multi-cordas direcional (leque descendente/ascendente por dedo `p-i-m-a` com micro-latência paramétrica, repique de bordão, estalo de caixa e abafamento seco) para *Pagode*, *Cururu*, *Cana-Verde*, *Guarânia*, *Chamamé* e *Catira*.
+  2. Sequenciador visual de sub-pulsos com animação vetorial da trajetória de ataque sobre o braço SVG (Canhoto/Destro) e analisador acústico de acentuação rítmica por envelope RMS via microfone.
+  3. Exportação direta de levadas e células rítmicas para o Editor de Tablaturas (Fase 7) e para as pistas do Looper (Fase 21).
 ---
 
 ## 📋 Backlog de Inovações Futuras (Projetos Proativos)
@@ -58,12 +58,36 @@ O agente autônomo selecionará diariamente o próximo projeto prioritário dest
     - Modelagem de blend piezo/condensador com atraso acústico de 0.42 ms e inversão de fase 0°/180°, filtro notch anti-microfonia (60–250 Hz) com Auto-Notch, equalizador paramétrico interativo de 5 bandas (`BiquadFilterNode`) com nós arrastáveis e espectro FFT em Canvas 2D, limiter de segurança e 6 presets de palco/estúdio compatíveis com Canhoto e Destro.
 19. **[x] Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas (Fase 21 Concluída):**
     - Looper multipista Web Audio API de 4 pistas sincronizado ao Lookahead Scheduler (quantização 1/4, 1/8, 1/16 e livre, contagem de entrada, overdubbing em camadas com undo seletivo, mute/solo, volume e balanço estéreo), 5 bases harmônicas caipiras em síntese de 3 stems (Violão + Viola + Caixa/Tampo) e guia visual dinâmico no braço SVG (Canhoto/Destro) alternando modos e escalas duadas por acorde em tempo real.
-20. **[ ] Laboratório de Técnicas Expressivas Caipiras (Ligados, Arrastes/Slides, Harmônicos Artificiais & Biomecânica de Mão) (Fase 22):**
-    - Síntese expressiva de hammer-on, pull-off, slide contínuo e harmônico artificial com treino cronometrado e projeção vetorial no braço SVG Canhoto/Destro.
+20. **[x] Laboratório de Técnicas Expressivas Caipiras (Ligados, Arrastes/Slides, Harmônicos Artificiais & Biomecânica de Mão) (Fase 22 Concluída):**
+    - Síntese física Web Audio API pura para *hammer-on*, *pull-off*, *slide* contínuo (`exponentialRampToValueAtTime`), *trinado*, *harmônico artificial (+12)* e *palm mute*, 8 exercícios progressivos cronometrados com metrônomo Lookahead e aceleração progressiva, projeção vetorial animada em 60 FPS no braço SVG (Canhoto/Destro), bancada Sandbox + diagrama biomecânico SVG e exportação em 1 clique para o Editor de Tablaturas.
+21. **[ ] Estúdio de Rasqueados, Repiques & Levadas Regionais (Síntese Direcional de Dedilhados & Captura Rítmica) (Fase 23):**
+    - Síntese multi-cordas direcional (`p-i-m-a`), trajetória animada sobre o braço SVG (Canhoto/Destro), detector de acentuação por microfone e exportação para Tablaturas e Looper.
 
 ---
 
 ## 📝 Histórico de Implementações Diárias
+
+- **20/11/2026 — Sessão 22** (Fase 22 Concluída):
+  - **Laboratório de Técnicas Expressivas Caipiras & Biomecânica de Mão (`/viola/index.html` + `nexus-vault/js/tab-viola.js`)**:
+    - **Motor de Síntese Física Web Audio API (`synthExpressiveCourse`, `ensureExpressiveAudioGraph`, `triggerExpressiveMechanicalNoise`)**:
+      - Modelagem acústica fiel nos 5 pares da viola (tratamento de pares uníssonos 1–2 e oitavados 3–5) e nas 6 cordas do violão, protegida por `DynamicsCompressorNode` (limiter em −4 dB):
+        - *Hammer-On (`hammer_on`)*: ataque inicial com transição contínua para a casa superior sem novo transiente de palheta, ajuste suave do filtro passa-baixas e micro-burst mecânico passa-banda em 1850 Hz simulando o impacto do dedo na madeira.
+        - *Pull-Off (`pull_off`)*: salto para a casa inferior ou corda solta com micro-impulso dinâmico de tração lateral da polpa e abertura controlada de brilho.
+        - *Slide Contínuo (`slide`)*: glissando real usando `osc.frequency.exponentialRampToValueAtTime`, rampa sincronizada de filtro passa-baixas e ruído friccional sutil para arrastes de 2+ casas (incluindo arrastes paralelos em terças e sextas).
+        - *Trinado Caipira (`trill`)*: oscilações balísticas rápidas (4–7 alternâncias contínuas) estabilizando na nota principal.
+        - *Harmônico Artificial de Oitava (`art_harmonic`)*: supressão da fundamental (~6%) e ressonância cristalina da 2ª parcial (`2·f₀`) e 4ª parcial (`4·f₀`) com filtro ressonante e longo decaimento vítreo.
+        - *Abafado de Palma (`palm_mute`)*: filtro passa-baixas fechado em queda rápida (`860 Hz` → `1.12·f₀`), decaimento percussivo seco e pulso hipotenar em 210 Hz.
+    - **Exercícios Progressivos Cronometrados com Metrônomo Lookahead (`EXPRESSIVE_EXERCISES_CATALOG`, `expressiveSchedulerTick`, `expressiveRafLoop`)**:
+      - Catálogo de 8 estudos cobrindo Nível 1 (Fundamentos) até Nível 3 (Virtuosismo), incluindo *Escalada de Hammer-On em Terças & Bordão*, *Cascata de Pull-Offs para Cordas Soltas*, *Arrastes em Sextas do Estradão*, *Trinado Lírico de Folia & Turina*, *Campainhas de Harmônico Artificial (+12)*, *Baixaria Abafada (Palm Mute) & Repique*, *Fraseado Expressivo de Pagode (H/P + Slide)* e *Ponteio Pantaneiro Completo (6 Técnicas)*.
+      - Scheduler Lookahead de 25 ms (`scheduleAheadSec = 0.11`) com **Count-In** configurável de 1 compasso, **Clique Guia**, seleção de velocidades didáticas (`50%`, `75%`, `100%`, `120%`), Loop contínuo e **Aceleração Progressiva Automática (+4 BPM por ciclo)**.
+      - **Bancada Sandbox Interativa**: disparo imediato ao clicar em qualquer casa do braço SVG com escolha de técnica, alcance (`+1`, `+2`, `+3`, `−2`, `Para Solta`), modo *Dueto Paralelo* e gravação direta em *Minha Frase Sandbox*.
+    - **Projeção Vetorial Animada & Biomecânica Canhoto/Destro (`renderFretboardSVG` modo `EXPRESSIVE`, `renderExpressiveBiomechSVG`)**:
+      - Sobreposição vetorial SVG adaptada nativamente para **Canhoto** e **Destro** (e perspectivas Diagrama/Músico): arcos Bézier com setas para `H`/`P`, trilhas tracejadas de `Slide` com cursor dourado animado em 60 FPS (`data-exp-slide-cursor`), onda senoidal para `Trinado`, losango nodal `◇ +12` com linha `L/2` no Harmônico Artificial e faixa de contato `PALM MUTE (RASTILHO)` ancorada no limite do corpo.
+      - Painel dedicado de **Biomecânica de Mão** atualizado dinamicamente a cada passo com diagrama vetorial de ângulos/vetores de força (*F*<sub>n</sub> / *F*<sub>t</sub>), medidor de carga tendínea e orientações específicas por mão conforme Canhoto ou Destro.
+    - **Exportação para o Editor de Tablaturas (`exportExpressiveToTabEditor` + extensão em `playPonteioEvent`)**:
+      - Exportação em 1 clique da frase do catálogo ou Sandbox para um novo projeto no Editor de Tablaturas (Fase 7), preservando metadados `expressive` para reprodução física autêntica dentro do próprio editor.
+    - **Integração na Plataforma Independente (`/viola/index.html`)**:
+      - Adicionada como recurso #24 na Estação 4 (*Ritmos, Modos & Improviso*) com `defaultShowFretboard: true`, botão de acesso rápido na Visão Geral, contagem atualizada em `/viola/index.html`, atalho `[Espaço]` para Play/Stop no Lab, persistência sanitizada (`loadViolaState`/`saveViolaState`) e parada limpa em `stopAllAudio()`, mantendo `nexus-vault/index.html` intacto.
 
 - **19/11/2026 — Sessão 21** (Fase 21 Concluída):
   - **Estúdio de Improviso Modal, Backing Tracks Caipiras & Looper Polifônico de 4 Pistas (`/viola/index.html` + `nexus-vault/js/tab-viola.js`)**:

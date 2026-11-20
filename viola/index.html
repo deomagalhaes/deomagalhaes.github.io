@@ -110,7 +110,7 @@
     <div id="studio-mobile-backdrop" class="hidden fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"></div>
 
     <!-- ===================================================================== -->
-    <!-- 1. SIDEBAR PROFISSIONAL FIXA À ESQUERDA (TODOS OS 23 RECURSOS)        -->
+    <!-- 1. SIDEBAR PROFISSIONAL FIXA À ESQUERDA (TODOS OS 24 RECURSOS)        -->
     <!-- ===================================================================== -->
     <aside id="studio-sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-[280px] shrink-0 bg-[#0b111e] border-r border-slate-800/80 flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out">
         <!-- Marca do Estúdio -->
@@ -134,7 +134,7 @@
             <div class="relative">
                 <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                 <input type="text" id="studio-sidebar-search" autocomplete="off"
-                    placeholder="Buscar entre 23 recursos..."
+                    placeholder="Buscar entre 24 recursos..."
                     class="w-full h-9 pl-8 pr-3 rounded-lg bg-[#070b12] border border-slate-800 focus:border-amber-500/60 focus:outline-none text-xs text-slate-200 placeholder-slate-500 transition">
             </div>
 
@@ -144,7 +144,7 @@
                     <i data-lucide="layout-grid" class="w-4 h-4 text-amber-400"></i>
                     <span>Visão Geral do Estúdio</span>
                 </span>
-                <span id="studio-overview-count" class="text-[10px] font-mono text-slate-500">23</span>
+                <span id="studio-overview-count" class="text-[10px] font-mono text-slate-500">24</span>
             </button>
         </div>
 
@@ -253,7 +253,7 @@
                         <div class="space-y-2 max-w-2xl">
                             <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-mono">
                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                                <span id="studio-hero-tool-count">Estúdio Completo • 23 Ferramentas em 5 Estações</span>
+                                <span id="studio-hero-tool-count">Estúdio Completo • 24 Ferramentas em 5 Estações</span>
                             </div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">Estúdio de Viola Caipira &amp; Violão</h2>
                             <p class="text-sm text-slate-400 leading-relaxed">
@@ -272,6 +272,10 @@
                             <button type="button" data-quick-open="estroboscopico" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold text-xs flex items-center gap-2 transition">
                                 <i data-lucide="disc" class="w-4 h-4 text-cyan-400"></i>
                                 <span>Afinador ±0.1¢</span>
+                            </button>
+                            <button type="button" data-quick-open="tecnicas-expressivas" class="px-4 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-200 font-semibold text-xs flex items-center gap-2 transition">
+                                <i data-lucide="zap" class="w-4 h-4 text-emerald-400"></i>
+                                <span>Técnicas Expressivas</span>
                             </button>
                             <button type="button" data-quick-open="pagode" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-semibold text-xs flex items-center gap-2 transition">
                                 <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
@@ -410,7 +414,7 @@
                 }
 
                 if (isOverviewOpen) {
-                    var totalTools = (window.VaultTabViola && window.VaultTabViola.tools) ? window.VaultTabViola.tools.length : 23;
+                    var totalTools = (window.VaultTabViola && window.VaultTabViola.tools) ? window.VaultTabViola.tools.length : 24;
                     if (topCat) topCat.textContent = 'Viola Studio';
                     if (topBadge) topBadge.textContent = totalTools + ' Recursos';
                     if (topTitle) topTitle.textContent = 'Visão Geral do Estúdio';
@@ -575,7 +579,7 @@
                     window.VaultTabViola.init();
                 }
 
-                var totalTools = (window.VaultTabViola && window.VaultTabViola.tools) ? window.VaultTabViola.tools.length : 23;
+                var totalTools = (window.VaultTabViola && window.VaultTabViola.tools) ? window.VaultTabViola.tools.length : 24;
                 var ovCountEl = document.getElementById('studio-overview-count');
                 var heroCountEl = document.getElementById('studio-hero-tool-count');
                 var searchEl = document.getElementById('studio-sidebar-search');
