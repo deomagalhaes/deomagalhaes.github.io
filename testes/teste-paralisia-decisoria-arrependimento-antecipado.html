@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala de Paralisia Decisória, Arrependimento Antecipado e Maximização (EMPD-AM / T-60) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu índice de hiperbusca maximizadora (Schwartz), simulação contrafactual no OFC (Coricelli), evitação de escolha e custo emocional na escala EMPD-AM / T-60.">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            font-size: 1.02em;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #475569;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            font-weight: 700;
+            color: #005f73;
+        }
+
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .result-score-banner {
+            text-align: center;
+            padding: 24px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .result-score-num {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .result-level-title {
+            font-size: 1.35em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dimension-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .dimension-card {
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dimension-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.98em;
+            color: #1e293b;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.6s ease;
+        }
+
+        .score-legend-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82em;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .clinical-notes-card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .clinical-notes-card h4 {
+            color: #005f73;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .action-cta-box {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .action-cta-box h3 {
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+
+        .action-cta-box p {
+            color: rgba(255, 255, 255, 0.92);
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .btn-cta-white {
+            display: inline-block;
+            background: #ffffff;
+            color: #005f73;
+            font-weight: 700;
+            padding: 12px 26px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-cta-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala de Paralisia Decisória, Arrependimento Antecipado e Maximização (EMPD-AM / T-60)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Instrumento Psicoeducativo</p>
+            </header>
+
+            <div class="quiz-container">
+                <div class="test-intro-box">
+                    <strong>Instruções:</strong> Esta escala avalia quatro engrenagens da indecisão crônica e do medo de renunciar a alternativas: <em>Hiperbusca Maximizadora (dACC / Schwartz)</em>, <em>Simulação Contrafactual e Arrependimento Antecipado (OFC / Coricelli)</em>, <em>Evitação Decisória e Adiamento da Renúncia (Aversão à Perda)</em> e <em>Custo Emocional e FOMO Pós-Escolha (DMN / Kierkegaard)</em>. Seus dados são processados <strong>100% no seu navegador</strong> com sigilo absoluto. Leia cada afirmação e assinale o quanto ela reflete seu funcionamento habitual nos <strong>últimos meses</strong>.
+                </div>
+
+                <form id="empdForm" onsubmit="calculateEmpd(event)">
+                    <!-- Dimensão 1 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Hiperbusca Maximizadora e Sobrecarga de Opções (dACC / Schwartz)</h3>
+                        <p>Coleta exaustiva de alternativas, dificuldade de adotar critérios suficientes (satisficing) e conflito pré-frontal diante de escolhas equivalentes.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">1. Antes de tomar uma decisão importante (ou até cotidiana), pesquiso exaustivamente dezenas de alternativas com medo de deixar passar uma opção melhor.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">2. Mesmo quando encontro uma alternativa que atende bem ao que preciso, continuo procurando para ter certeza de que é a melhor possível.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">3. Quanto mais opções tenho à minha frente, mais minha mente trava e mais difícil fica concluir uma escolha simples.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">4. Costumo pedir opiniões a várias pessoas diferentes sobre uma mesma escolha e acabo ainda mais confuso(a) com os argumentos contrários.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">5. Tenho dificuldade em aceitar uma solução "boa o suficiente", pois sinto que se não for a ideal terei fracassado na escolha.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Simulação Contrafactual e Arrependimento Antecipado (OFC / Coricelli)</h3>
+                        <p>Projeção de dor futura pelo caminho descartado, cálculo obsessivo de "e se?" e medo paralisante de errar irreversivelmente.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">6. Antes mesmo de decidir, já imagino com riqueza de detalhes o quanto vou me arrepender se a opção escolhida apresentar algum defeito depois.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">7. Quando preciso escolher um caminho, meu foco recai muito mais sobre tudo o que estou perdendo ao descartar os outros do que sobre o que estou ganhando.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">8. Sinto um aperto físico ou vertigem quando uma decisão fecha definitivamente outras possibilidades de carreira, vínculo ou estilo de vida.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">9. Repasso mentalmente cenários hipotéticos de "e se eu tivesse escolhido diferente?" mesmo diante de decisões reversíveis ou pequenas.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">10. Trato escolhas comuns como se fossem sentenças definitivas e irremediáveis, exigindo garantia absoluta de que não haverá frustração futura.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Evitação Decisória e Adiamento da Renúncia (Aversão à Perda)</h3>
+                        <p>Manutenção de portas entreabertas, procrastinação de compromissos e delegação passiva da escolha ao tempo ou a terceiros.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">11. Adio decisões importantes por semanas ou meses porque mantê-las em aberto me dá a sensação provisória de que ainda não perdi nenhuma opção.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">12. Muitas vezes espero que o prazo expire ou que outra pessoa decida por mim para não carregar o peso de ter escolhido errado.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">13. Já perdi oportunidades concretas (vagas, projetos, experiências ou vínculos) porque demorei demais tentando ter certeza absoluta antes de agir.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">14. Tenho dificuldade em assumir compromissos firmes de longo prazo porque a ideia de renunciar às demais possibilidades me sufoca.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">15. Prefiro manter planos vagos ou "planos B" permanentes do que me dedicar integralmente a uma única direção.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Custo Emocional, FOMO Existencial e Erosão Pós-Escolha (DMN / Sartre)</h3>
+                        <p>Insatisfação após decidir, comparação contínua com vidas não vividas, exaustão mental e perda de presença no caminho escolhido.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">16. Mesmo depois de fazer uma boa escolha, continuo olhando para o lado e me perguntando se as alternativas descartadas não teriam me feito mais feliz.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">17. Sinto esgotamento mental ao final de processos simples de decisão, como se tivesse corrido uma maratona cognitiva.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q17" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">18. Quando algo dá errado após uma decisão minha, culpo-me severamente por não ter previsto aquela falha durante a análise.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q18" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">19. Percebo que a comparação constante com caminhos alternativos me impede de aproveitar e construir valor real na escolha que já fiz.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q19" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">20. Tenho a sensação de que minha vida está parada em uma sala de espera porque não consigo encerrar dúvidas e seguir em uma direção clara.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q20" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit-test">Calcular Perfil na Escala EMPD-AM (T-60)</button>
+                </form>
+
+                <!-- Devolutiva Clínica do Teste -->
+                <div id="resultContainer" class="result-container">
+                    <div class="result-score-banner">
+                        <div style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: 700;">Seu Resultado Global na Escala EMPD-AM</div>
+                        <div id="scoreNumber" class="result-score-num">-- / 80</div>
+                        <div id="levelTitle" class="result-level-title">Calculando...</div>
+                        <p id="levelDesc" style="color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.6; font-size: 0.95em;"></p>
+                    </div>
+
+                    <h3 style="color: #005f73; margin-bottom: 18px;">Mapeamento Dimensional da Paralisia Decisória e Arrependimento Antecipado</h3>
+                    <div class="dimension-scores-grid">
+                        <div class="dimension-card">
+                            <h4>1. Hiperbusca Maximizadora (dACC)</h4>
+                            <div class="progress-bar-bg"><div id="dim1Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim1Score">0/20</span><span id="dim1Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>2. Simulação Contrafactual (OFC)</h4>
+                            <div class="progress-bar-bg"><div id="dim2Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim2Score">0/20</span><span id="dim2Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>3. Evitação da Renúncia</h4>
+                            <div class="progress-bar-bg"><div id="dim3Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim3Score">0/20</span><span id="dim3Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>4. FOMO &amp; Custo Pós-Escolha</h4>
+                            <div class="progress-bar-bg"><div id="dim4Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim4Score">0/20</span><span id="dim4Desc">--</span></div>
+                        </div>
+                    </div>
+
+                    <div class="clinical-notes-card">
+                        <h4>Diretrizes Clínicas e Neuropsicológicas (Da Vertigem da Escolha ao Compromisso Vital)</h4>
+                        <div id="clinicalAdviceText" style="color: #334155; font-size: 0.95em; line-height: 1.7;"></div>
+                    </div>
+
+                    <div class="action-cta-box">
+                        <h3>Quer Destravar Decisões Importantes Sem Ficar Refém do "E Se?"</h3>
+                        <p>A psicoterapia baseada em evidências (ACT e TCC) aliada à avaliação das funções executivas ajuda a regular a aversão à perda, definir critérios de valor e transformar indecisão em autoria consciente.</p>
+                        <a href="/agendamento.html" class="btn-cta-white">Agendar Avaliação Clínica com Deo Magalhães</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        function calculateEmpd(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('empdForm');
+            let d1 = 0, d2 = 0, d3 = 0, d4 = 0;
+
+            for (let i = 1; i <= 5; i++) d1 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 6; i <= 10; i++) d2 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 11; i <= 15; i++) d3 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 16; i <= 20; i++) d4 += parseInt(form[`q${i}`].value, 10);
+
+            const globalScore = d1 + d2 + d3 + d4;
+
+            const scoreNumber = document.getElementById('scoreNumber');
+            const levelTitle = document.getElementById('levelTitle');
+            const levelDesc = document.getElementById('levelDesc');
+            const clinicalAdviceText = document.getElementById('clinicalAdviceText');
+
+            scoreNumber.textContent = `${globalScore} / 80`;
+
+            if (globalScore <= 35) {
+                levelTitle.textContent = "Perfil Satisficer Preservado / Baixa Paralisia Decisória";
+                levelTitle.style.color = "#0a9396";
+                levelDesc.textContent = "Você utiliza critérios claros de suficiência alinhados aos seus valores, tolera bem a renúncia inerente a qualquer escolha e investe energia em construir valor após decidir sem ruminação contrafactual excessiva.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Agência Pré-Frontal Saudável:</strong> Seu dlPFC e seu córtex orbitofrontal equilibram ponderação realista e capacidade de fechamento decisório.</li><li><strong>Postura Satisficer (Schwartz):</strong> Ao não exigir perfeição matemática impossível, você preserva reserva executiva e satisfação pós-escolha.</li><li><strong>Manutenção Preventiva:</strong> Continue protegendo prazos objetivos para decisões reversíveis e cultivando presença no caminho escolhido.</li></ul>";
+            } else if (globalScore <= 52) {
+                levelTitle.textContent = "Maximização Moderada / Atrito Contrafactual Pontual";
+                levelTitle.style.color = "#ee9b00";
+                levelDesc.textContent = "Na maior parte do cotidiano você consegue avançar, mas diante de escolhas com múltiplas variáveis equivalentes tende a pesquisar além do necessário e a calcular o custo das portas fechadas no OFC.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Regra dos 3 Critérios Suficientes:</strong> Defina por escrito seus critérios essenciais antes de pesquisar; a primeira alternativa que os cumprir merece compromisso.</li><li><strong>Prazo de Corte Objetivo:</strong> Separe decisões reversíveis (prazo curto) de decisões estruturais, encerrando abas comparativas após a escolha.</li><li><strong>Síntese Psicológica (Gilbert):</strong> Redirecione a energia gasta em comparar hipóteses para cuidar da alternativa que já está em suas mãos.</li></ul>";
+            } else if (globalScore <= 68) {
+                levelTitle.textContent = "Paralisia Decisória Elevada / Hipercomputação de Arrependimento";
+                levelTitle.style.color = "#ca6702";
+                levelDesc.textContent = "Padrão consistente de sobrecarga no dACC, simulação contrafactual intensa no OFC e adiamento protetivo para evitar o luto simbólico das opções descartadas, gerando fadiga executiva e FOMO pós-escolha.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Desarmar a Ilusão da Porta Entreaberta:</strong> Manter todas as opções em suspenso para não perder nenhuma já é perder o tempo presente (Kierkegaard e Sartre).</li><li><strong>Aceitação da Renúncia como Forma:</strong> Reenquadre o descarte de caminhos secundários não como prejuízo no estriado, mas como condição para dar contorno concreto à própria história.</li><li><strong>Moratória Anti-Comparação:</strong> Após decidir, aplique um bloqueio deliberado de busca por alternativas concorrentes durante pelo menos 14 dias.</li></ul>";
+            } else {
+                levelTitle.textContent = "Paralisia Decisória Severa / Vertigem da Liberdade e Esquiva Experiencial";
+                levelTitle.style.color = "#9b2226";
+                levelDesc.textContent = "O medo de escolher errado e o arrependimento antecipado sequestram a tomada de decisão, mantendo você paralisado em análises infinitas ou delegando escolhas vitais ao acaso, com alto custo emocional e sensação de estagnação.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Esquiva Experiencial e Má-Fé Existencial:</strong> A busca por certeza absoluta funciona como defesa contra a angústia da finitude e da responsabilidade pessoal; nenhuma planilha eliminará a dose inevitável de risco da liberdade.</li><li><strong>Prática de Compromisso Gradual (ACT):</strong> Treine microdecisões diárias com limite estrito de pesquisa (ex.: 5 minutos) para dessensibilizar o alarme de erro no OFC/ínsula.</li><li><strong>Acompanhamento Clínico Especializado:</strong> Psicoterapia baseada em evidências (ACT e TCC) e avaliação neuropsicológica executiva são fortemente indicadas para destravar a agência decisória e resgatar movimento vital.</li></ul>";
+            }
+
+            updateBar('dim1Bar', 'dim1Score', 'dim1Desc', d1, 20, d1 > 14 ? "#9b2226" : d1 > 10 ? "#ee9b00" : "#0a9396", "Maximização");
+            updateBar('dim2Bar', 'dim2Score', 'dim2Desc', d2, 20, d2 > 14 ? "#9b2226" : d2 > 10 ? "#ee9b00" : "#0a9396", "Contrafactual");
+            updateBar('dim3Bar', 'dim3Score', 'dim3Desc', d3, 20, d3 > 14 ? "#9b2226" : d3 > 10 ? "#ee9b00" : "#0a9396", "Evitação");
+            updateBar('dim4Bar', 'dim4Score', 'dim4Desc', d4, 20, d4 > 14 ? "#9b2226" : d4 > 10 ? "#ee9b00" : "#0a9396", "FOMO/Custo");
+
+            const rc = document.getElementById('resultContainer');
+            rc.style.display = 'block';
+            rc.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateBar(barId, scoreId, descId, val, max, color, label) {
+            const pct = Math.round((val / max) * 100);
+            const bar = document.getElementById(barId);
+            bar.style.width = pct + '%';
+            bar.style.backgroundColor = color;
+            document.getElementById(scoreId).textContent = `${val} / ${max} (${pct}%)`;
+            document.getElementById(descId).textContent = `${label}: ${pct < 45 ? 'Baixo' : pct < 70 ? 'Moderado' : 'Elevado'}.`;
+        }
+    </script>
+</body>
+</html>

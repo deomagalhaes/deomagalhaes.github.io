@@ -20,6 +20,108 @@
 
 window.SESSAO_CATALOGO_EXTRA = [
     {
+        id: "EMPD_AM",
+        code: "T-60",
+        shortTitle: "EMPD-AM (Paralisia Decisória)",
+        fullTitle: "Escala de Paralisia Decisória, Arrependimento Antecipado e Maximização (EMPD-AM / T-60)",
+        cardDescription: "20 itens (4 dimensões). Hiperbusca maximizadora, simulação contrafactual (OFC), evitação da renúncia e FOMO pós-escolha.",
+        category: "Funções Executivas",
+        icon: "git-branch",
+        accentColor: "teal",
+        protocolPrefix: "DM-DEC-",
+        instruction: "Leia cada afirmação abaixo e assinale o quanto ela reflete seu funcionamento habitual diante de decisões nos <strong>últimos meses</strong>.",
+        options: [
+            { value: 1, label: "Discordo Totalmente", desc: "Não reflete" },
+            { value: 2, label: "Discordo Parcialmente", desc: "Pouco frequente" },
+            { value: 3, label: "Concordo Parcialmente", desc: "Frequente" },
+            { value: 4, label: "Concordo Totalmente", desc: "Reflete muito" }
+        ],
+        subscales: [
+            {
+                id: "maximizacao",
+                label: "Hiperbusca Maximizadora e Sobrecarga de Opções (dACC / Schwartz)",
+                desc: "Coleta exaustiva de alternativas, dificuldade de adotar critérios suficientes (satisficing) e conflito diante de escolhas equivalentes.",
+                color: "bg-teal-600"
+            },
+            {
+                id: "contrafactual",
+                label: "Simulação Contrafactual e Arrependimento Antecipado (OFC / Coricelli)",
+                desc: "Projeção de dor futura pelo caminho descartado, cálculo obsessivo de 'e se?' e medo paralisante de errar irreversivelmente.",
+                color: "bg-indigo-600"
+            },
+            {
+                id: "evitacao",
+                label: "Evitação Decisória e Adiamento da Renúncia (Aversão à Perda)",
+                desc: "Manutenção de portas entreabertas, procrastinação de compromissos e delegação passiva da escolha ao tempo ou a terceiros.",
+                color: "bg-amber-600"
+            },
+            {
+                id: "fomo",
+                label: "Custo Emocional, FOMO Existencial e Erosão Pós-Escolha (DMN / Sartre)",
+                desc: "Insatisfação após decidir, comparação contínua com vidas não vividas, exaustão mental e perda de presença no caminho escolhido.",
+                color: "bg-rose-600"
+            }
+        ],
+        items: [
+            { id: 1, text: "Antes de tomar uma decisão importante (ou até cotidiana), pesquiso exaustivamente dezenas de alternativas com medo de deixar passar uma opção melhor.", domain: "maximizacao", domainLabel: "Hiperbusca Maximizadora", reverse: false },
+            { id: 2, text: "Mesmo quando encontro uma alternativa que atende bem ao que preciso, continuo procurando para ter certeza de que é a melhor possível.", domain: "maximizacao", domainLabel: "Hiperbusca Maximizadora", reverse: false },
+            { id: 3, text: "Quanto mais opções tenho à minha frente, mais minha mente trava e mais difícil fica concluir uma escolha simples.", domain: "maximizacao", domainLabel: "Hiperbusca Maximizadora", reverse: false },
+            { id: 4, text: "Costumo pedir opiniões a várias pessoas diferentes sobre uma mesma escolha e acabo ainda mais confuso(a) com os argumentos contrários.", domain: "maximizacao", domainLabel: "Hiperbusca Maximizadora", reverse: false },
+            { id: 5, text: "Tenho dificuldade em aceitar uma solução 'boa o suficiente', pois sinto que se não for a ideal terei fracassado na escolha.", domain: "maximizacao", domainLabel: "Hiperbusca Maximizadora", reverse: false },
+
+            { id: 6, text: "Antes mesmo de decidir, já imagino com riqueza de detalhes o quanto vou me arrepender se a opção escolhida apresentar algum defeito depois.", domain: "contrafactual", domainLabel: "Simulação Contrafactual", reverse: false },
+            { id: 7, text: "Quando preciso escolher um caminho, meu foco recai muito mais sobre tudo o que estou perdendo ao descartar os outros do que sobre o que estou ganhando.", domain: "contrafactual", domainLabel: "Simulação Contrafactual", reverse: false },
+            { id: 8, text: "Sinto um aperto físico ou vertigem quando uma decisão fecha definitivamente outras possibilidades de carreira, vínculo ou estilo de vida.", domain: "contrafactual", domainLabel: "Simulação Contrafactual", reverse: false },
+            { id: 9, text: "Repasso mentalmente cenários hipotéticos de 'e se eu tivesse escolhido diferente?' mesmo diante de decisões reversíveis ou pequenas.", domain: "contrafactual", domainLabel: "Simulação Contrafactual", reverse: false },
+            { id: 10, text: "Trato escolhas comuns como se fossem sentenças definitivas e irremediáveis, exigindo garantia absoluta de que não haverá frustração futura.", domain: "contrafactual", domainLabel: "Simulação Contrafactual", reverse: false },
+
+            { id: 11, text: "Adio decisões importantes por semanas ou meses porque mantê-las em aberto me dá a sensação provisória de que ainda não perdi nenhuma opção.", domain: "evitacao", domainLabel: "Evitação da Renúncia", reverse: false },
+            { id: 12, text: "Muitas vezes espero que o prazo expire ou que outra pessoa decida por mim para não carregar o peso de ter escolhido errado.", domain: "evitacao", domainLabel: "Evitação da Renúncia", reverse: false },
+            { id: 13, text: "Já perdi oportunidades concretas (vagas, projetos, experiências ou vínculos) porque demorei demais tentando ter certeza absoluta antes de agir.", domain: "evitacao", domainLabel: "Evitação da Renúncia", reverse: false },
+            { id: 14, text: "Tenho dificuldade em assumir compromissos firmes de longo prazo porque a ideia de renunciar às demais possibilidades me sufoca.", domain: "evitacao", domainLabel: "Evitação da Renúncia", reverse: false },
+            { id: 15, text: "Prefiro manter planos vagos ou 'planos B' permanentes do que me dedicar integralmente a uma única direção.", domain: "evitacao", domainLabel: "Evitação da Renúncia", reverse: false },
+
+            { id: 16, text: "Mesmo depois de fazer uma boa escolha, continuo olhando para o lado e me perguntando se as alternativas descartadas não teriam me feito mais feliz.", domain: "fomo", domainLabel: "FOMO & Custo Pós-Escolha", reverse: false },
+            { id: 17, text: "Sinto esgotamento mental ao final de processos simples de decisão, como se tivesse corrido uma maratona cognitiva.", domain: "fomo", domainLabel: "FOMO & Custo Pós-Escolha", reverse: false },
+            { id: 18, text: "Quando algo dá errado após uma decisão minha, culpo-me severamente por não ter previsto aquela falha durante a análise.", domain: "fomo", domainLabel: "FOMO & Custo Pós-Escolha", reverse: false },
+            { id: 19, text: "Percebo que a comparação constante com caminhos alternativos me impede de aproveitar e construir valor real na escolha que já fiz.", domain: "fomo", domainLabel: "FOMO & Custo Pós-Escolha", reverse: false },
+            { id: 20, text: "Tenho a sensação de que minha vida está parada em uma sala de espera porque não consigo encerrar dúvidas e seguir em uma direção clara.", domain: "fomo", domainLabel: "FOMO & Custo Pós-Escolha", reverse: false }
+        ],
+        cutoffs: [
+            {
+                max: 35,
+                label: "Perfil Satisficer Preservado / Baixa Paralisia Decisória",
+                badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
+                summary: "Utiliza critérios claros de suficiência alinhados a valores pessoais, tolera bem a renúncia inerente à escolha e investe energia pós-decisão sem ruminação contrafactual excessiva."
+            },
+            {
+                max: 52,
+                label: "Maximização Moderada / Atrito Contrafactual Pontual",
+                badgeClass: "bg-yellow-100 text-yellow-800 border-yellow-300",
+                summary: "Avança na maior parte das decisões cotidianas, mas tende a pesquisar além do necessário e calcular o custo das portas fechadas no OFC diante de opções equivalentes."
+            },
+            {
+                max: 68,
+                label: "Paralisia Decisória Elevada / Hipercomputação de Arrependimento",
+                badgeClass: "bg-orange-100 text-orange-800 border-orange-300",
+                summary: "Padrão consistente de sobrecarga no dACC, simulação contrafactual intensa no OFC e adiamento protetivo para evitar o luto simbólico das opções descartadas, gerando fadiga executiva e FOMO."
+            },
+            {
+                max: 80,
+                label: "Paralisia Decisória Severa / Vertigem da Liberdade e Esquiva Experiencial",
+                badgeClass: "bg-red-100 text-red-800 border-red-300",
+                summary: "Medo de escolher errado e arrependimento antecipado sequestram a tomada de decisão, mantendo o sujeito paralisado em análises infinitas ou delegação passiva. Recomenda-se protocolo ACT/TCC de compromisso e avaliação executiva."
+            }
+        ],
+        references: [
+            "Camille, N., et al. (2004). The involvement of the orbitofrontal cortex in the experience of regret. <em>Science</em>, 304(5674), 1167-1170.",
+            "Coricelli, G., et al. (2005). Regret and its avoidance: a neuroimaging study of choice behavior. <em>Nature Neuroscience</em>, 8(9), 1255-1262.",
+            "Kahneman, D. (2012). <em>Rápido e Devagar: Duas Formas de Pensar</em>. Rio de Janeiro: Objetiva.",
+            "Schwartz, B. (2007). <em>O Paradoxo da Escolha: Por Que Mais É Menos</em>. São Paulo: A Girafa."
+        ]
+    },
+
+    {
         id: "EMCH_SR",
         code: "T-59",
         shortTitle: "EMCH-SR (Ciúme & Vigilância)",

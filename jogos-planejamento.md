@@ -65,6 +65,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 56** | **Matriz de Cadência Sustentável e Desarme da Urgência** | Regulação do Locus Coeruleus (LC-NE), Alostase Hedônica, Proteção do dlPFC (Arnsten) e Ressonância (Hartmut Rosa) | `jogos/jogo-cadencia-sustentavel-desarme-urgencia.html` | ✅ **Publicado** |
 | **Dia 57** | **Matriz de Calibração Assertiva e Desarme da Hostilidade Passiva** | Firmeza Assertiva (Frontal Esquerdo), Desarme de Stonewalling (Gottman), Regulação Somática (Ínsula/Gross) e Justiça Relacional | `jogos/jogo-calibracao-assertiva-desarme-passivo.html` | ✅ **Publicado** |
 | **Dia 58** | **Matriz de Desarme do Ciúme e Calibração da Confiança Relacional** | Discriminação Fato vs. Simulação da DMN, Prevenção de Checagens (EPR/Leahy), Regulação dACC/Ínsula e Amor em Liberdade (Spinoza/Epicteto) | `jogos/jogo-desarme-ciume-calibracao-confianca.html` | ✅ **Publicado** |
+| **Dia 59** | **Matriz de Compromisso Decisório e Desarme do Arrependimento** | Critérios Suficientes (Satisficing/Schwartz), Simulação Contrafactual (OFC/Coricelli), Aceitação da Renúncia (Kierkegaard/Sartre) e Amor Fati (Nietzsche) | `jogos/jogo-compromisso-decisorio-desarme-arrependimento.html` | ✅ **Publicado** |
 
 ---
 

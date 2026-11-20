@@ -66,6 +66,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-57** | **Escala Multidimensional de Urgência Crônica e Dependência de Adrenalina (EMUC-DA)** | Ativação por Pressão (LC-NE), Intolerância à Quietude (Alostase), Fabricação de Crises e Custo Pré-Frontal (Arnsten) | `testes/teste-urgencia-cronica-adiccao-adrenalina.html` | ✅ Concluído |
 | **T-58** | **Escala Multidimensional de Raiva Reprimida, Ressentimento Silencioso e Hostilidade Passiva (EMRR-HP)** | Supressão Expressiva (dlPFC/Gross), Ressentimento Ruminal (dACC), Stonewalling (Gottman) e Custo Somático (Ínsula) | `testes/teste-raiva-reprimida-agressividade-passiva.html` | ✅ Concluído |
 | **T-59** | **Escala Multidimensional de Ciúme Cognitivo, Hipervigilância Afetiva e Segurança Relacional (EMCH-SR)** | Vigilância e Checagem Compulsiva (dACC/Estriado), Intrusão Imaginativa (DMN/STS), Busca de Reasseguramento (Leahy) e Circuito PANIC/GRIEF | `testes/teste-ciume-obsessivo-hipervigilancia-afetiva.html` | ✅ Concluído |
+| **T-60** | **Escala Multidimensional de Paralisia Decisória, Arrependimento Antecipado e Maximização (EMPD-AM)** | Hiperbusca Maximizadora (dACC/Schwartz), Simulação Contrafactual (OFC/Coricelli), Evitação da Renúncia (Aversão à Perda) e FOMO Pós-Escolha (DMN/Sartre) | `testes/teste-paralisia-decisoria-arrependimento-antecipado.html` | ✅ Concluído |
 
 ---
 
