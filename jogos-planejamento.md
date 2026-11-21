@@ -67,6 +67,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 58** | **Matriz de Desarme do Ciúme e Calibração da Confiança Relacional** | Discriminação Fato vs. Simulação da DMN, Prevenção de Checagens (EPR/Leahy), Regulação dACC/Ínsula e Amor em Liberdade (Spinoza/Epicteto) | `jogos/jogo-desarme-ciume-calibracao-confianca.html` | ✅ **Publicado** |
 | **Dia 59** | **Matriz de Compromisso Decisório e Desarme do Arrependimento** | Critérios Suficientes (Satisficing/Schwartz), Simulação Contrafactual (OFC/Coricelli), Aceitação da Renúncia (Kierkegaard/Sartre) e Amor Fati (Nietzsche) | `jogos/jogo-compromisso-decisorio-desarme-arrependimento.html` | ✅ **Publicado** |
 | **Dia 60** | **Matriz de Tolerância ao Silêncio e Atenção Contemplativa** | Comutação Ínsula Anterior (CEN–DMN), Desmame de Hipernovidade (Estriado/Wilson), Tédio Fértil e Vita Contemplativa (Pascal, Heidegger, Han) | `jogos/jogo-tolerancia-silencio-atencao-contemplativa.html` | ✅ **Publicado** |
+| **Dia 61** | **Matriz de Encerramento Pós-Evento e Esquecimento Ativo** | Perspectiva de Campo vs. Observador (Clark & Wells), Reconsolidação Mnêmica (Nader), Regulação Contrafactual (OFC/dACC) e Esquecimento Ativo (Nietzsche/Sartre) | `jogos/jogo-encerramento-pos-evento-esquecimento-ativo.html` | ✅ **Publicado** |
 
 ---
 

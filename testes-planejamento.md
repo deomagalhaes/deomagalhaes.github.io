@@ -68,6 +68,7 @@ Este arquivo gerencia a esteira de desenvolvimento de **Escalas Psicométricas e
 | **T-59** | **Escala Multidimensional de Ciúme Cognitivo, Hipervigilância Afetiva e Segurança Relacional (EMCH-SR)** | Vigilância e Checagem Compulsiva (dACC/Estriado), Intrusão Imaginativa (DMN/STS), Busca de Reasseguramento (Leahy) e Circuito PANIC/GRIEF | `testes/teste-ciume-obsessivo-hipervigilancia-afetiva.html` | ✅ Concluído |
 | **T-60** | **Escala Multidimensional de Paralisia Decisória, Arrependimento Antecipado e Maximização (EMPD-AM)** | Hiperbusca Maximizadora (dACC/Schwartz), Simulação Contrafactual (OFC/Coricelli), Evitação da Renúncia (Aversão à Perda) e FOMO Pós-Escolha (DMN/Sartre) | `testes/teste-paralisia-decisoria-arrependimento-antecipado.html` | ✅ Concluído |
 | **T-61** | **Escala Multidimensional de Intolerância ao Tédio, Fome de Estímulos e Desconexão Contemplativa (EMIT-FE)** | Fome de Estímulos (Estriado/Hipernovidade), Aversão ao Silêncio (Wilson/DMN), Falha Atencional (Eastwood/Ínsula–CEN) e Erosão Contemplativa (Pascal/Han) | `testes/teste-tedio-cronico-fome-estimulos.html` | ✅ Concluído |
+| **T-62** | **Escala Multidimensional de Ruminação Pós-Evento e Autópsia Social (EMRP-AS)** | Reencenação Episódica (DMN/Hipocampo), Leitura Mental e Vergonha (Clark & Wells/dACC), Autópsia Contrafactual (OFC) e Bloqueio do Esquecimento Ativo (Nietzsche/Nader) | `testes/teste-ruminacao-pos-evento-autopsia-social.html` | ✅ Concluído |
 
 ---
 

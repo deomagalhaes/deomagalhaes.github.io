@@ -20,6 +20,7 @@ Adicione novos temas, referências ou reflexões que você queira abordar:
 ---
 
 ## ✅ Pautas Publicadas
+- [x] **A Neurobiologia da Ruminação Pós-Evento e da Autópsia Social: Por Que o Cérebro Reencena Conversas e Erros em Loop** (Publicado em 21/11/2026)
 - [x] **A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior: Por Que Ficar a Sós Consigo Mesmo Parece Insuportável ao Cérebro** (Publicado em 20/11/2026)
 - [x] **A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado: Por Que Escolher Um Caminho e Renunciar aos Outros Paralisa o Cérebro** (Publicado em 20/11/2026)
 - [x] **A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva: Como o Medo da Perda Sequestra a Imaginação e Corrói a Intimidade** (Publicado em 19/11/2026)

@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/artigos.html</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -92,13 +92,13 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/jogos.html</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -110,7 +110,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/recursos.html</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -134,7 +134,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/testes.html</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -273,6 +273,12 @@
   <url>
     <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-da-raiva-reprimida-e-agressividade-passiva.html</loc>
     <lastmod>2026-11-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deomagalhaes.com.br/artigos/a-neurobiologia-da-ruminacao-pos-evento-e-autopsia-social.html</loc>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1153,6 +1159,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/testes/teste-ruminacao-pos-evento-autopsia-social.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/testes/teste-ruminacao.html</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
@@ -1543,6 +1555,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://deomagalhaes.com.br/jogos/jogo-encerramento-pos-evento-esquecimento-ativo.html</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://deomagalhaes.com.br/jogos/jogo-encontre-animais.html</loc>
     <lastmod>2026-10-29</lastmod>
     <changefreq>monthly</changefreq>
@@ -1928,7 +1946,7 @@
   </url>
   <url>
     <loc>https://deomagalhaes.com.br/ferramentas-clinicas/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

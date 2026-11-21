@@ -24,6 +24,7 @@ Acesse a aplicação visual interativa diretamente no navegador:
 
 | Data | Artigo / Tema Base | Arquivo | Status |
 |---|---|---|---|
+| **21/11/2026** | **A Neurobiologia da Ruminação Pós-Evento e da Autópsia Social** | [social/2026-11-21-ruminacao-pos-evento-autopsia-social.md](2026-11-21-ruminacao-pos-evento-autopsia-social.md) | ✅ Pronto para postar |
 | **20/11/2026** | **A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior** | [social/2026-11-20-tedio-cronico-intolerancia-ao-silencio.md](2026-11-20-tedio-cronico-intolerancia-ao-silencio.md) | ✅ Pronto para postar |
 | **20/11/2026** | **A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado** | [social/2026-11-20-paralisia-decisoria-arrependimento-antecipado.md](2026-11-20-paralisia-decisoria-arrependimento-antecipado.md) | ✅ Pronto para postar |
 | **19/11/2026** | **A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva** | [social/2026-11-19-ciume-obsessivo-hipervigilancia-afetiva.md](2026-11-19-ciume-obsessivo-hipervigilancia-afetiva.md) | ✅ Pronto para postar |

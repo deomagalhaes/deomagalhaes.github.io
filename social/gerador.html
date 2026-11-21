@@ -775,7 +775,8 @@
                 <div class="control-group">
                     <label class="control-label" for="articleSelect">Selecione o Artigo ou Fábula:</label>
                     <select id="articleSelect" onchange="loadPresetArticle(this.value)">
-                        <option value="tedio-cronico-intolerancia-ao-silencio" selected>A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior</option>
+                        <option value="ruminacao-pos-evento-autopsia-social" selected>A Neurobiologia da Ruminação Pós-Evento e da Autópsia Social</option>
+                        <option value="tedio-cronico-intolerancia-ao-silencio">A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior</option>
                         <option value="paralisia-decisoria-arrependimento-antecipado">A Neurobiologia da Paralisia Decisória e do Arrependimento Antecipado</option>
                         <option value="ciume-obsessivo-hipervigilancia-afetiva">A Neurobiologia do Ciúme Obsessivo e da Hipervigilância Afetiva: O Medo da Perda</option>
                         <option value="raiva-reprimida-agressividade-passiva">A Neurobiologia da Raiva Reprimida e da Agressividade Passiva: O Custo de Engolir Limites</option>
@@ -1118,6 +1119,63 @@
     <script>
         // Banco de Dados Pré-Configurado de Artigos Clínicos
         const PRESETS = {
+    "ruminacao-pos-evento-autopsia-social": {
+      "articleSlug": "2026-11-21-ruminacao-pos-evento-autopsia-social",
+      "articleTitle": "A Neurobiologia da Ruminação Pós-Evento e da Autópsia Social",
+      "slides": [
+        {
+          "type": "cover",
+          "badge": "NEUROCIÊNCIA & RELAÇÕES",
+          "title": "Por que seu cérebro reencena *conversas antigas às 2h da manhã?*",
+          "body": "A reunião acabou há horas ou o encontro terminou ontem, mas sua mente continua repetindo cada frase, pausa e expressão facial em câmera lenta.\n\nNa psicologia clínica, isso tem nome: *ruminação pós-evento (autópsia social)*.",
+          "footer": "Deslize para entender o que acende esse loop ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "CLARK & WELLS (1995)",
+          "title": "Você não lembra do que houve — você assiste a uma *projeção de vergonha*",
+          "body": "Na autópsia social, o cérebro abandona a perspectiva real e adota a *perspectiva do observador*.\n\nEm vez de recordar a reação concreta do outro, você projeta sobre a cena a imagem interna distorcida de como temeu parecer — e a trata como prova de fracasso.",
+          "footer": "O circuito neural por trás do replay ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "DMN, HIPOCAMPO, dACC & OFC",
+          "title": "O teatro interno da *ameaça social não resolvida*",
+          "body": "A *Rede de Modo Padrão (DMN)* e o *Hipocampo* reabrem o episódio porque o *dACC* e a *Ínsula Anterior* o marcaram com dor social.\n\nEnquanto isso, o *Córtex Orbitofrontal (OFC)* simula respostas perfeitas para um passado que não admite edição.",
+          "footer": "O perigo oculto da reconsolidação ➔"
+        },
+        {
+          "type": "contrast",
+          "badge": "RECONSOLIDAÇÃO MNÊMICA (NADER)",
+          "title": "Extração sábia vs. *regravação punitiva da ferida*",
+          "body": "Reconsolidação Sábia: Extrair uma lição objetiva em 2 minutos e fechar o arquivo mental.\n\nAutópsia Punitiva (Nader & LeDoux): Toda vez que você reabre a memória com vergonha e cortisol, ela entra em estado lábil e é regravada com ainda mais dor para a noite seguinte.",
+          "footer": "O diagnóstico de Nietzsche e Sartre ➔"
+        },
+        {
+          "type": "concept",
+          "badge": "NIETZSCHE, SARTRE & SÊNECA",
+          "title": "O tribunal do outro vs. *o esquecimento ativo*",
+          "body": "Friedrich Nietzsche descreveu o *esquecimento ativo* como uma força plástica sem a qual não existe saúde psíquica nem presente vivo.\n\n*Sartre & Sêneca:* Às 2h da manhã, internalizamos o 'olhar do outro' como juiz implacável de um instante já consumado.",
+          "footer": "4 passos clínicos para encerrar a autópsia ➔"
+        },
+        {
+          "type": "steps",
+          "badge": "PROTOCOLO CLÍNICO",
+          "title": "4 passos para *fechar o tribunal interno*",
+          "body": "1. *Extração de 2 Minutos:* Há reparação prática real? Anote em 1 frase. Se não, encerre o julgamento.\n\n2. *Fatos vs. Leitura Mental:* Separe o que foi dito de fato do que você supôs que o outro pensou.\n\n3. *Reconsolidação Sem Açoite:* Mude a âncora somática e recuse exigir edição de estúdio de uma fala espontânea.",
+          "footer": "Da culpa retrospectiva à presença viva ➔"
+        },
+        {
+          "type": "cta",
+          "badge": "TESTE PSICOMÉTRICO & ARTIGO",
+          "title": "Sem a força de fechar o passado, o presente não consegue respirar",
+          "body": "Quando você devolve o ontem ao ontem, a mente recupera a leveza para voltar a encontrar o outro sem medo.\n\n📖 Leia o artigo completo: A Neurobiologia da Ruminação Pós-Evento e da Autópsia Social\n\n🧠 Faça a Escala EMRP-AS (T-62) e jogue o Dia 61 no portal.",
+          "footer": "Salve este guia e compartilhe @deomagalhaesneuro"
+        }
+      ],
+      "caption": "A conversa terminou há horas, a reunião já foi encerrada ou a mensagem já foi enviada há dias — mas, às duas da manhã, seu cérebro reabre o processo e examina cada vírgula, pausa e expressão alheia sob um microscópio implacável.\n\nNa neuropsicologia e na terapia cognitiva (Clark & Wells; Brozovich & Heimberg), esse fenômeno chama-se ruminação pós-evento (PEP) — ou autópsia social. Quando ele se instala, você não recorda o episódio a partir da realidade concreta, mas através da perspectiva distorcida do observador: projeta sobre o passado a imagem carregada de vergonha que temeu exibir.\n\nA neurociência mostra por que o loop parece tão real. A Rede de Modo Padrão (DMN) e o Hipocampo reabrem o arquivo porque o Córtex Cingulado Anterior Dorsal (dACC) sinalizou risco de rejeição social, enquanto o Córtex Orbitofrontal (OFC) simula compulsivamente respostas perfeitas que você 'deveria ter dado'. E, como provaram Karim Nader e Joseph LeDoux, cada vez que reabrimos uma memória com vergonha e cortisol, nós a reconsolidamos com ainda mais peso emocional.\n\nComo escreveu Friedrich Nietzsche na Genealogia da Moral, o esquecimento ativo não é um defeito, mas uma força plástica essencial da saúde: sem a capacidade de fechar portas e digerir o vivido, não existe presente possível.\n\nO novo artigo científico completo, a Escala Multidimensional de Ruminação Pós-Evento e Autópsia Social (EMRP-AS / T-62) e o Jogo de Encerramento Pós-Evento e Esquecimento Ativo (Dia 61) já estão disponíveis gratuitamente em deomagalhaes.com.br (link na bio).\n\nQual conversa antiga sua mente costuma reencenar de madrugada mesmo sabendo que nada mais pode ser alterado?\n\n#neuropsicologia #neurociencias #ruminacaoposevento #autopsiasocial #ansiedadesocial #dmn #reconsolidacao #nietzsche #sartre #terapiacognitiva #tcc #saudemental #deomagalhaes #psicologiaclinica #autoconhecimento"
+    },
+
     "tedio-cronico-intolerancia-ao-silencio": {
       "articleSlug": "2026-11-20-tedio-cronico-intolerancia-ao-silencio",
       "articleTitle": "A Neurobiologia do Tédio Crônico e da Intolerância ao Silêncio Interior",
@@ -5215,9 +5273,9 @@
         };
 
         // Estado do Studio
-        let currentPresetKey = "tedio-cronico-intolerancia-ao-silencio";
-        let currentSlides = JSON.parse(JSON.stringify(PRESETS["tedio-cronico-intolerancia-ao-silencio"].slides));
-        let currentCaption = PRESETS["tedio-cronico-intolerancia-ao-silencio"].caption;
+        let currentPresetKey = "ruminacao-pos-evento-autopsia-social";
+        let currentSlides = JSON.parse(JSON.stringify(PRESETS["ruminacao-pos-evento-autopsia-social"].slides));
+        let currentCaption = PRESETS["ruminacao-pos-evento-autopsia-social"].caption;
 
 
 

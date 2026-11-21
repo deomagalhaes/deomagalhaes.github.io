@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9X4VW4FNZZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9X4VW4FNZZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala Multidimensional de Ruminação Pós-Evento e Autópsia Social (EMRP-AS / T-62) – Deo Magalhães</title>
+    <meta name="description" content="Avalie seu índice de reencenação episódica na DMN, leitura mental retrospectiva (Clark &amp; Wells), autópsia contrafactual no OFC e bloqueio do esquecimento ativo (T-62).">
+
+    <link rel="icon" href="/assets/favicon2.png" type="image/png">
+    <link rel="stylesheet" href="/assets/style.css">
+
+    <style>
+        .quiz-container {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 32px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-intro-box {
+            background: #f8fafc;
+            border-left: 4px solid #005f73;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .dimension-header-box {
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #005f73;
+        }
+
+        .dimension-header-box h3 {
+            color: #005f73;
+            margin: 0;
+            font-size: 1.15em;
+        }
+
+        .dimension-header-box p {
+            color: #64748b;
+            font-size: 0.85em;
+            margin: 4px 0 0 0;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-color: #0a9396;
+            box-shadow: 0 2px 8px rgba(10, 147, 150, 0.08);
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 14px;
+            font-size: 1.02em;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: #475569;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .option-label:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .option-label input[type="radio"]:checked + span {
+            font-weight: 700;
+            color: #005f73;
+        }
+
+        .btn-submit-test {
+            display: block;
+            width: 100%;
+            background: #005f73;
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: 700;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 35px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit-test:hover {
+            background: #0a9396;
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .result-score-banner {
+            text-align: center;
+            padding: 24px;
+            border-radius: 10px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        .result-score-num {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #005f73;
+            margin: 10px 0;
+        }
+
+        .result-level-title {
+            font-size: 1.35em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dimension-scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .dimension-card {
+            background: #ffffff;
+            padding: 18px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .dimension-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.98em;
+            color: #1e293b;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.6s ease;
+        }
+
+        .score-legend-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.82em;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .clinical-notes-card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .clinical-notes-card h4 {
+            color: #005f73;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .action-cta-box {
+            background: linear-gradient(135deg, #005f73, #0a9396);
+            color: #ffffff;
+            padding: 28px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .action-cta-box h3 {
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.3em;
+        }
+
+        .action-cta-box p {
+            color: rgba(255, 255, 255, 0.92);
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .btn-cta-white {
+            display: inline-block;
+            background: #ffffff;
+            color: #005f73;
+            font-weight: 700;
+            padding: 12px 26px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-cta-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-bar-left">
+                <a href="https://wa.me/5535933003807" target="_blank" title="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></a>
+                <a href="mailto:contato@deomagalhaes.com.br" title="E-mail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></a>
+            </div>
+            <div class="top-bar-right">
+                <a href="https://instagram.com/deomagalhaesneuro" target="_blank" title="Instagram"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="https://maps.app.goo.gl/RzFpdi8WWzzNNHM96" target="_blank" title="Localização"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header Canônico -->
+    <header id="main-header">
+        <div class="header-content container">
+            <a href="/index.html" class="logo-container">
+                <img src="/assets/logo-deo.png" alt="Logotipo Deo Magalhães">
+                <div class="logo-text">
+                    <span class="name">Deo Magalhães</span>
+                    <span class="subtitle">Neurociência e Comportamento</span>
+                </div>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Abrir menu">☰</button>
+            <nav id="main-nav">
+                <a href="/index.html">Home</a>
+                <a href="/sobre.html">Sobre</a>
+                <a href="/servicos.html">Serviços</a>
+                <a href="/agendamento.html">Agendamento</a>
+                <a href="/artigos.html">Artigos</a>
+                <a href="/testes.html" class="active">Testes</a>
+                <a href="/jogos.html">Jogos</a>
+                <a href="/recursos.html">Recursos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container article-container">
+            <header class="article-header">
+                <h1>Escala Multidimensional de Ruminação Pós-Evento e Autópsia Social (EMRP-AS / T-62)</h1>
+                <p class="article-author-date">Por Deo Magalhães - Neuropsicólogo e Neurocientista (CRP 04/42784) - Instrumento Psicoeducativo</p>
+            </header>
+
+            <div class="quiz-container">
+                <div class="test-intro-box">
+                    <strong>Instruções:</strong> Esta escala avalia quatro dimensões da ruminação pós-evento e da autópsia social após interações, reuniões ou conversas: <em>Reencenação Episódica Compulsiva (DMN / Hipocampo)</em>, <em>Viés de Leitura Mental e Vergonha Retrospectiva (Clark &amp; Wells / dACC)</em>, <em>Autópsia Contrafactual e Desejo de Reescrever (OFC / "E se...")</em> e <em>Bloqueio do Esquecimento Ativo e Hiperalerta Noturno (Nietzsche / Reconsolidação)</em>. Seus dados são processados <strong>100% no seu navegador</strong> com sigilo absoluto. Leia cada afirmação e assinale o quanto ela reflete seu funcionamento habitual nos <strong>últimos meses</strong>.
+                </div>
+
+                <form id="emrpForm" onsubmit="calculateEmrp(event)">
+                    <!-- Dimensão 1 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 1: Reencenação Episódica Compulsiva (DMN / Hipocampo)</h3>
+                        <p>Repetição involuntária de diálogos, entonações e gestos horas ou dias após o encerramento de uma interação social.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">1. Após uma conversa importante, reunião ou encontro social, minha mente volta a repassar repetidamente o que eu disse e fiz, como um filme que não desliga.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q1" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q1" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">2. Costumo reler várias vezes mensagens ou e-mails que já enviei para verificar se o tom pareceu seco, estranho ou inadequado.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q2" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q2" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">3. Mesmo quando tento me distrair com trabalho ou lazer, trechos de um diálogo encerrado invadem minha atenção de forma automática.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q3" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q3" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">4. Ao me lembrar de uma interação, foco quase exclusivamente em um pequeno tropeço ou silêncio constrangedor e apago os momentos em que tudo fluiu bem.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q4" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q4" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">5. Sinto que preciso "analisar tudo até o fim" depois de sair de um ambiente social para tentar entender se me comportei de maneira aceitável.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q5" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q5" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 2 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 2: Viés de Leitura Mental e Vergonha Retrospectiva (Clark &amp; Wells / dACC)</h3>
+                        <p>Interpretação punitiva de sinais sociais neutros e reconstrução da cena sob a perspectiva distorcida do observador.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">6. Quando relembro um encontro, imagino a cena vista de fora e tenho a sensação nítida de que pareci tolo(a), ansioso(a) ou desajeitado(a) aos olhos dos outros.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q6" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q6" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">7. Se alguém demora a responder uma mensagem ou exibe um rosto sério durante uma conversa, concluo rapidamente que disse algo errado ou desagradável.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q7" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q7" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">8. Muitas vezes sinto uma onda súbita de vergonha física (calor no rosto, aperto no peito) ao recordar uma fala antiga que ninguém mais parece lembrar.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q8" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q8" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">9. Costumo assumir que comentários neutros ou olhares breves das pessoas depois que eu falo significam reprovação silenciosa ou tédio com a minha presença.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q9" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q9" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">10. Mesmo quando recebo um retorno positivo após uma exposição ou conversa, desconfio que foi apenas educação e continuo procurando onde falhei.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q10" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q10" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 3 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 3: Autópsia Contrafactual e Desejo de Reescrever (OFC / "E se...")</h3>
+                        <p>Simulação obsessiva de respostas ideais não dadas e tentativa estéril de editar mentalmente um passado já consumado.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">11. Passo longos minutos ensaiando mentalmente respostas mais inteligentes, firmes ou elegantes que eu "deveria ter dado" na hora da conversa.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q11" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q11" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">12. Fico preso(a) em pensamentos do tipo "se eu não tivesse falado aquilo, tudo teria sido diferente", mesmo quando não há nada para corrigir.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q12" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q12" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">13. Sinto forte impulso de mandar uma mensagem extra horas depois para me justificar ou esclarecer algo que provavelmente ninguém interpretou mal.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q13" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q13" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">14. Acredito que, se eu ficar remoendo meus erros sociais com rigor suficiente, conseguirei evitar passar vergonha novamente no futuro.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q14" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q14" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">15. Quanto mais analiso o que deveria ter feito em uma situação passada, mais incompetente ou ansioso(a) me sinto para o próximo encontro.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q15" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q15" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Dimensão 4 -->
+                    <div class="dimension-header-box">
+                        <h3>Dimensão 4: Bloqueio do Esquecimento Ativo e Hiperalerta Noturno (Nietzsche / Reconsolidação)</h3>
+                        <p>Dificuldade em encerrar psiquicamente o episódio, impacto no sono e regravação punitiva da memória.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">16. Ao deitar para dormir depois de um dia cheio de interações, meu cérebro liga um tribunal retrospectivo que atrasa o sono ou me acorda de madrugada.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q16" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q16" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">17. Tenho grande dificuldade de "virar a página" após uma gafe leve ou mal-entendido social, carregando o mal-estar por dias inteiros.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q17" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q17" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">18. Lembro com detalhes dolorosos de constrangimentos sociais ocorridos há anos, e quando eles surgem ainda me sinto tão mal quanto na época.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q18" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q18" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">19. Acabo evitando novos convites, falas em grupo ou encontros espontâneos para não ter de enfrentar o desgaste mental de ficar me julgando depois.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q19" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q19" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <div class="question-text">20. Sinto que o peso das conversas antigas que não consigo soltar rouba a espontaneidade e a alegria de estar presente com as pessoas hoje.</div>
+                        <div class="options-grid">
+                            <label class="option-label"><input type="radio" name="q20" value="1" required><span>Discordo Totalmente (1)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="2"><span>Discordo Parcialmente (2)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="3"><span>Concordo Parcialmente (3)</span></label>
+                            <label class="option-label"><input type="radio" name="q20" value="4"><span>Concordo Totalmente (4)</span></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit-test">Calcular Perfil na Escala EMRP-AS (T-62)</button>
+                </form>
+
+                <!-- Devolutiva Clínica do Teste -->
+                <div id="resultContainer" class="result-container">
+                    <div class="result-score-banner">
+                        <div style="font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: 700;">Seu Resultado Global na Escala EMRP-AS</div>
+                        <div id="scoreNumber" class="result-score-num">-- / 80</div>
+                        <div id="levelTitle" class="result-level-title">Calculando...</div>
+                        <p id="levelDesc" style="color: #475569; max-width: 650px; margin: 0 auto; line-height: 1.6; font-size: 0.95em;"></p>
+                    </div>
+
+                    <h3 style="color: #005f73; margin-bottom: 18px;">Mapeamento Dimensional da Ruminação Pós-Evento e Autópsia Social</h3>
+                    <div class="dimension-scores-grid">
+                        <div class="dimension-card">
+                            <h4>1. Reencenação Episódica (DMN)</h4>
+                            <div class="progress-bar-bg"><div id="dim1Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim1Score">0/20</span><span id="dim1Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>2. Leitura Mental / Vergonha (dACC)</h4>
+                            <div class="progress-bar-bg"><div id="dim2Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim2Score">0/20</span><span id="dim2Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>3. Autópsia Contrafactual (OFC)</h4>
+                            <div class="progress-bar-bg"><div id="dim3Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim3Score">0/20</span><span id="dim3Desc">--</span></div>
+                        </div>
+                        <div class="dimension-card">
+                            <h4>4. Bloqueio do Esquecimento Ativo</h4>
+                            <div class="progress-bar-bg"><div id="dim4Bar" class="progress-bar-fill" style="width: 0%;"></div></div>
+                            <div class="score-legend-row"><span id="dim4Score">0/20</span><span id="dim4Desc">--</span></div>
+                        </div>
+                    </div>
+
+                    <div class="clinical-notes-card">
+                        <h4>Diretrizes Clínicas e Neuropsicológicas (Do Tribunal Interno ao Esquecimento Ativo)</h4>
+                        <div id="clinicalAdviceText" style="color: #334155; font-size: 0.95em; line-height: 1.7;"></div>
+                    </div>
+
+                    <div class="action-cta-box">
+                        <h3>Quer Encerrar o Tribunal da Madrugada e Voltar a Interagir Sem Medo?</h3>
+                        <p>A psicoterapia baseada em evidências (TCC para ansiedade social e ACT) ajuda a desarmar a perspectiva do observador, reconsolidar memórias sociais sem vergonha tóxica e restaurar a presença.</p>
+                        <a href="/agendamento.html" class="btn-cta-white">Agendar Avaliação Clínica com Deo Magalhães</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé Canônico Obrigatório -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h4>Contato</h4>
+                <ul>
+                    <li><a href="https://wa.me/5535933003807" target="_blank">(35) 9 3300-3807</a></li>
+                    <li><a href="mailto:contato@deomagalhaes.com.br">contato@deomagalhaes.com.br</a></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Guaranésia, MG</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Informações Profissionais</h4>
+                <ul>
+                    <li>CRP 04/42784</li>
+                    <li>Neuropsicólogo Clínico</li>
+                    <li>Especialista em Neurociências</li>
+                    <li>Membro da SBNp</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Redes Sociais</h4>
+                <ul>
+                    <li><a href="https://instagram.com/deomagalhaesneuro" target="_blank"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg> @deomagalhaesneuro</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 Deo Magalhães - Neuropsicólogo CRP 04/42784. Todos os direitos reservados.</p>
+                <p>Desenvolvido com tecnologia moderna para melhor experiência do usuário.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/script.js"></script>
+    <script>
+        function calculateEmrp(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('emrpForm');
+            let d1 = 0, d2 = 0, d3 = 0, d4 = 0;
+
+            for (let i = 1; i <= 5; i++) d1 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 6; i <= 10; i++) d2 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 11; i <= 15; i++) d3 += parseInt(form[`q${i}`].value, 10);
+            for (let i = 16; i <= 20; i++) d4 += parseInt(form[`q${i}`].value, 10);
+
+            const globalScore = d1 + d2 + d3 + d4;
+
+            const scoreNumber = document.getElementById('scoreNumber');
+            const levelTitle = document.getElementById('levelTitle');
+            const levelDesc = document.getElementById('levelDesc');
+            const clinicalAdviceText = document.getElementById('clinicalAdviceText');
+
+            scoreNumber.textContent = `${globalScore} / 80`;
+
+            if (globalScore <= 35) {
+                levelTitle.textContent = "Encerramento Saudável / Esquecimento Ativo Preservado";
+                levelTitle.style.color = "#0a9396";
+                levelDesc.textContent = "Seu cérebro processa interações sociais e eventuais gafes sem ficar preso ao tribunal retrospectivo, preservando a força plástica do esquecimento ativo (Nietzsche) e o descanso noturno.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Perspectiva de Campo Equilibrada:</strong> Você avalia conversas pelo que ocorreu concretamente, sem projeções severas de vergonha.</li><li><strong>Baixo Custo no OFC:</strong> Não desperdiça energia recalculando respostas perfeitas para situações encerradas.</li><li><strong>Manutenção Preventiva:</strong> Continue cultivando autocompaixão diante da espontaneidade humana nos diálogos diários.</li></ul>";
+            } else if (globalScore <= 52) {
+                levelTitle.textContent = "Autópsia Social Pontual / Revisão Pós-Evento Moderada";
+                levelTitle.style.color = "#ee9b00";
+                levelDesc.textContent = "Após situações de maior exposição, sua DMN tende a revisar falas e buscar sinais de aprovação, mas você ainda consegue encerrar o episódio após algum tempo.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Regra da Extração em 2 Minutos:</strong> Se houver um aprendizado objetivo, anote em uma frase; depois, feche deliberadamente o arquivo mental.</li><li><strong>Checagem de Leitura Mental:</strong> Lembre-se de que silêncios alheios raramente significam rejeição — na maioria das vezes refletem cansaço ou distração do outro.</li><li><strong>Higiene Pré-Sono:</strong> Evite reler mensagens enviadas nas duas horas anteriores ao descanso noturno.</li></ul>";
+            } else if (globalScore <= 68) {
+                levelTitle.textContent = "Ruminação Pós-Evento Elevada / Loop de Autópsia Social";
+                levelTitle.style.color = "#ca6702";
+                levelDesc.textContent = "Padrão consistente do ciclo descrito por Clark e Wells: a perspectiva do observador e a simulação contrafactual no OFC reabrem conversas encerradas, gerando vergonha somática e desgaste noturno.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Desarmando o Olhar do Outro (Sartre):</strong> Nomeie a imagem mental constrangedora como uma construção interna distorcida, não como retrato fiel do que os outros viram.</li><li><strong>Interrupção da Reconsolidação Punitiva (Nader):</strong> Não permaneça na cama alimentando o julgamento; levante-se, mude a âncora sensorial e interrompa o replay antes que regrave a vergonha.</li><li><strong>Abandonar a Justificativa Compulsiva:</strong> Resista ao impulso de enviar mensagens extras explicando o que não precisava de correção.</li></ul>";
+            } else {
+                levelTitle.textContent = "Autópsia Social Crônica / Sequestro da DMN e Bloqueio do Presente";
+                levelTitle.style.color = "#9b2226";
+                levelDesc.textContent = "A ruminação pós-evento assumiu caráter crônico e incapacitante: a memória episódica e o alarme de dor social (dACC/Ínsula) mantêm encontros passados abertos indefinidamente, bloqueando o sono e levando à evitação social.";
+                clinicalAdviceText.innerHTML = "<ul><li><strong>Dispepsia Psíquica (Nietzsche):</strong> A ausência do esquecimento ativo está aprisionando sua energia vital em eventos imutáveis e roubando a espontaneidade do presente.</li><li><strong>Abolição da Crença Protetora:</strong> Ruminar erros após o fato não protege contra humilhação futura — apenas reforça a ansiedade antecipatória (Abbott &amp; Rapee).</li><li><strong>Acompanhamento Clínico Especializado:</strong> Recomenda-se psicoterapia estruturada (TCC para ansiedade social / ACT) voltada à reestruturação da perspectiva do observador e regulação da vergonha.</li></ul>";
+            }
+
+            updateBar('dim1Bar', 'dim1Score', 'dim1Desc', d1, 20, d1 > 14 ? "#9b2226" : d1 > 10 ? "#ee9b00" : "#0a9396", "Reencenação");
+            updateBar('dim2Bar', 'dim2Score', 'dim2Desc', d2, 20, d2 > 14 ? "#9b2226" : d2 > 10 ? "#ee9b00" : "#0a9396", "Vergonha/dACC");
+            updateBar('dim3Bar', 'dim3Score', 'dim3Desc', d3, 20, d3 > 14 ? "#9b2226" : d3 > 10 ? "#ee9b00" : "#0a9396", "Contrafactual");
+            updateBar('dim4Bar', 'dim4Score', 'dim4Desc', d4, 20, d4 > 14 ? "#9b2226" : d4 > 10 ? "#ee9b00" : "#0a9396", "Bloqueio Noturno");
+
+            const rc = document.getElementById('resultContainer');
+            rc.style.display = 'block';
+            rc.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateBar(barId, scoreId, descId, val, max, color, label) {
+            const pct = Math.round((val / max) * 100);
+            const bar = document.getElementById(barId);
+            bar.style.width = pct + '%';
+            bar.style.backgroundColor = color;
+            document.getElementById(scoreId).textContent = `${val} / ${max} (${pct}%)`;
+            document.getElementById(descId).textContent = `${label}: ${pct < 45 ? 'Baixo' : pct < 70 ? 'Moderado' : 'Elevado'}.`;
+        }
+    </script>
+</body>
+</html>

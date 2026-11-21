@@ -20,6 +20,107 @@
 
 window.SESSAO_CATALOGO_EXTRA = [
     {
+        id: "EMRP_AS",
+        code: "T-62",
+        shortTitle: "EMRP-AS (Ruminação Pós-Evento)",
+        fullTitle: "Escala Multidimensional de Ruminação Pós-Evento e Autópsia Social (EMRP-AS / T-62)",
+        cardDescription: "20 itens (4 dimensões). Reencenação episódica na DMN, perspectiva do observador (Clark & Wells), autópsia contrafactual (OFC) e bloqueio do esquecimento ativo.",
+        category: "Regulação & Estresse",
+        icon: "rotate-ccw",
+        accentColor: "teal",
+        protocolPrefix: "DM-PEP-",
+        instruction: "Leia cada afirmação abaixo e assinale o quanto ela reflete seu funcionamento habitual após interações sociais nos <strong>últimos meses</strong>.",
+        options: [
+            { value: 1, label: "Discordo Totalmente", desc: "Não reflete" },
+            { value: 2, label: "Discordo Parcialmente", desc: "Pouco frequente" },
+            { value: 3, label: "Concordo Parcialmente", desc: "Frequente" },
+            { value: 4, label: "Concordo Totalmente", desc: "Reflete muito" }
+        ],
+        subscales: [
+            {
+                id: "reencenacao_dmn",
+                label: "Reencenação Episódica Compulsiva (DMN / Hipocampo)",
+                desc: "Repetição involuntária de diálogos, entonações e gestos horas ou dias após o encerramento de uma interação social.",
+                color: "bg-teal-600"
+            },
+            {
+                id: "leitura_mental_vergonha",
+                label: "Viés de Leitura Mental e Vergonha Retrospectiva (Clark & Wells / dACC)",
+                desc: "Interpretação punitiva de sinais sociais neutros e reconstrução da cena sob a perspectiva distorcida do observador.",
+                color: "bg-indigo-600"
+            },
+            {
+                id: "autopsia_contrafactual",
+                label: "Autópsia Contrafactual e Desejo de Reescrever (OFC / \"E se...\")",
+                desc: "Simulação obsessiva de respostas ideais não dadas e tentativa estéril de editar mentalmente um passado já consumado.",
+                color: "bg-amber-600"
+            },
+            {
+                id: "bloqueio_esquecimento",
+                label: "Bloqueio do Esquecimento Ativo e Hiperalerta Noturno (Nietzsche / Reconsolidação)",
+                desc: "Dificuldade em encerrar psiquicamente o episódio, impacto no sono e regravação punitiva da memória.",
+                color: "bg-rose-600"
+            }
+        ],
+        items: [
+            { id: 1, text: "Após uma conversa importante, reunião ou encontro social, minha mente volta a repassar repetidamente o que eu disse e fiz, como um filme que não desliga.", domain: "reencenacao_dmn", domainLabel: "Reencenação Episódica", reverse: false },
+            { id: 2, text: "Costumo reler várias vezes mensagens ou e-mails que já enviei para verificar se o tom pareceu seco, estranho ou inadequado.", domain: "reencenacao_dmn", domainLabel: "Reencenação Episódica", reverse: false },
+            { id: 3, text: "Mesmo quando tento me distrair com trabalho ou lazer, trechos de um diálogo encerrado invadem minha atenção de forma automática.", domain: "reencenacao_dmn", domainLabel: "Reencenação Episódica", reverse: false },
+            { id: 4, text: "Ao me lembrar de uma interação, foco quase exclusivamente em um pequeno tropeço ou silêncio constrangedor e apago os momentos em que tudo fluiu bem.", domain: "reencenacao_dmn", domainLabel: "Reencenação Episódica", reverse: false },
+            { id: 5, text: "Sinto que preciso 'analisar tudo até o fim' depois de sair de um ambiente social para tentar entender se me comportei de maneira aceitável.", domain: "reencenacao_dmn", domainLabel: "Reencenação Episódica", reverse: false },
+
+            { id: 6, text: "Quando relembro um encontro, imagino a cena vista de fora e tenho a sensação nítida de que pareci tolo(a), ansioso(a) ou desajeitado(a) aos olhos dos outros.", domain: "leitura_mental_vergonha", domainLabel: "Vergonha / dACC", reverse: false },
+            { id: 7, text: "Se alguém demora a responder uma mensagem ou exibe um rosto sério durante uma conversa, concluo rapidamente que disse algo errado ou desagradável.", domain: "leitura_mental_vergonha", domainLabel: "Vergonha / dACC", reverse: false },
+            { id: 8, text: "Muitas vezes sinto uma onda súbita de vergonha física (calor no rosto, aperto no peito) ao recordar uma fala antiga que ninguém mais parece lembrar.", domain: "leitura_mental_vergonha", domainLabel: "Vergonha / dACC", reverse: false },
+            { id: 9, text: "Costumo assumir que comentários neutros ou olhares breves das pessoas depois que eu falo significam reprovação silenciosa ou tédio com a minha presença.", domain: "leitura_mental_vergonha", domainLabel: "Vergonha / dACC", reverse: false },
+            { id: 10, text: "Mesmo quando recebo um retorno positivo após uma exposição ou conversa, desconfio que foi apenas educação e continuo procurando onde falhei.", domain: "leitura_mental_vergonha", domainLabel: "Vergonha / dACC", reverse: false },
+
+            { id: 11, text: "Passo longos minutos ensaiando mentalmente respostas mais inteligentes, firmes ou elegantes que eu 'deveria ter dado' na hora da conversa.", domain: "autopsia_contrafactual", domainLabel: "Autópsia Contrafactual", reverse: false },
+            { id: 12, text: "Fico preso(a) em pensamentos do tipo 'se eu não tivesse falado aquilo, tudo teria sido diferente', mesmo quando não há nada para corrigir.", domain: "autopsia_contrafactual", domainLabel: "Autópsia Contrafactual", reverse: false },
+            { id: 13, text: "Sinto forte impulso de mandar uma mensagem extra horas depois para me justificar ou esclarecer algo que provavelmente ninguém interpretou mal.", domain: "autopsia_contrafactual", domainLabel: "Autópsia Contrafactual", reverse: false },
+            { id: 14, text: "Acredito que, se eu ficar remoendo meus erros sociais com rigor suficiente, conseguirei evitar passar vergonha novamente no futuro.", domain: "autopsia_contrafactual", domainLabel: "Autópsia Contrafactual", reverse: false },
+            { id: 15, text: "Quanto mais analiso o que deveria ter feito em uma situação passada, mais incompetente ou ansioso(a) me sinto para o próximo encontro.", domain: "autopsia_contrafactual", domainLabel: "Autópsia Contrafactual", reverse: false },
+
+            { id: 16, text: "Ao deitar para dormir depois de um dia cheio de interações, meu cérebro liga um tribunal retrospectivo que atrasa o sono ou me acorda de madrugada.", domain: "bloqueio_esquecimento", domainLabel: "Bloqueio Noturno", reverse: false },
+            { id: 17, text: "Tenho grande dificuldade de 'virar a página' após uma gafe leve ou mal-entendido social, carregando o mal-estar por dias inteiros.", domain: "bloqueio_esquecimento", domainLabel: "Bloqueio Noturno", reverse: false },
+            { id: 18, text: "Lembro com detalhes dolorosos de constrangimentos sociais ocorridos há anos, e quando eles surgem ainda me sinto tão mal quanto na época.", domain: "bloqueio_esquecimento", domainLabel: "Bloqueio Noturno", reverse: false },
+            { id: 19, text: "Acabo evitando novos convites, falas em grupo ou encontros espontâneos para não ter de enfrentar o desgaste mental de ficar me julgando depois.", domain: "bloqueio_esquecimento", domainLabel: "Bloqueio Noturno", reverse: false },
+            { id: 20, text: "Sinto que o peso das conversas antigas que não consigo soltar rouba a espontaneidade e a alegria de estar presente com as pessoas hoje.", domain: "bloqueio_esquecimento", domainLabel: "Bloqueio Noturno", reverse: false }
+        ],
+        cutoffs: [
+            {
+                max: 35,
+                label: "Encerramento Saudável / Esquecimento Ativo Preservado",
+                badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
+                summary: "Processa interações sociais e eventuais gafes sem ficar preso ao tribunal retrospectivo, preservando a força plástica do esquecimento ativo (Nietzsche) e o repouso noturno."
+            },
+            {
+                max: 52,
+                label: "Autópsia Social Pontual / Revisão Pós-Evento Moderada",
+                badgeClass: "bg-yellow-100 text-yellow-800 border-yellow-300",
+                summary: "Após situações de maior exposição, a DMN tende a revisar falas e buscar sinais de aprovação, mas ainda consegue encerrar o episódio após algum tempo."
+            },
+            {
+                max: 68,
+                label: "Ruminação Pós-Evento Elevada / Loop de Autópsia Social",
+                badgeClass: "bg-orange-100 text-orange-800 border-orange-300",
+                summary: "Padrão consistente do ciclo de Clark & Wells: a perspectiva do observador e a simulação contrafactual no OFC reabrem conversas encerradas, gerando vergonha somática e desgaste noturno."
+            },
+            {
+                max: 80,
+                label: "Autópsia Social Crônica / Sequestro da DMN e Bloqueio do Presente",
+                badgeClass: "bg-red-100 text-red-800 border-red-300",
+                summary: "A memória episódica e o alarme de dor social (dACC/Ínsula) mantêm encontros passados abertos indefinidamente, prejudicando o sono e levando à evitação social. Recomenda-se TCC para ansiedade social / ACT."
+            }
+        ],
+        references: [
+            "Abbott, M. J., & Rapee, R. M. (2004). Post-event rumination and negative self-appraisal in social phobia before and after treatment. <em>Journal of Abnormal Psychology</em>, 113(1), 136-144.",
+            "Brozovich, F., & Heimberg, R. G. (2008). An analysis of post-event processing in social anxiety disorder. <em>Clinical Psychology Review</em>, 28(6), 891-903.",
+            "Clark, D. M., & Wells, A. (1995). A cognitive model of social phobia. In R. G. Heimberg et al. (Eds.), <em>Social Phobia: Diagnosis, Assessment, and Treatment</em> (pp. 69-93). Guilford Press.",
+            "Nader, K., Schafe, G. E., & Le Doux, J. E. (2000). Fear memories require protein synthesis in the amygdala for reconsolidation after retrieval. <em>Nature</em>, 406, 722-726."
+        ]
+    },
+    {
         id: "EMIT_FE",
         code: "T-61",
         shortTitle: "EMIT-FE (Intolerância ao Tédio)",
