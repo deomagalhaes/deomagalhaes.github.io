@@ -20,6 +20,108 @@
 
 window.SESSAO_CATALOGO_EXTRA = [
     {
+        id: "EMCF_EM",
+        code: "T-63",
+        shortTitle: "EMCF-EM (Congelamento Funcional)",
+        fullTitle: "Escala Multidimensional de Congelamento Funcional e Exaustão Mascarada (EMCF-EM / T-63)",
+        cardDescription: "20 itens (4 dimensões). Co-ativação polivagal (Porges), piloto automático no estriado (Yin & Knowlton), anestesia interoceptiva (vlPAG/Ínsula) e clausura silenciosa.",
+        category: "Regulação & Estresse",
+        icon: "snowflake",
+        accentColor: "teal",
+        protocolPrefix: "DM-FFZ-",
+        instruction: "Leia cada afirmação abaixo e assinale o quanto ela reflete seu funcionamento nos <strong>últimos meses</strong>.",
+        options: [
+            { value: 1, label: "Discordo Totalmente", desc: "Não reflete" },
+            { value: 2, label: "Discordo Parcialmente", desc: "Pouco frequente" },
+            { value: 3, label: "Concordo Parcialmente", desc: "Frequente" },
+            { value: 4, label: "Concordo Totalmente", desc: "Reflete muito" }
+        ],
+        subscales: [
+            {
+                id: "coativacao_polivagal",
+                label: "Co-Ativação Autonômica (Acelerador Simpático + Freio Dorsal / Porges)",
+                desc: "Sensação simultânea de urgência mental acelerada e imobilidade corporal diante do que exige início ou escolha.",
+                color: "bg-teal-600"
+            },
+            {
+                id: "piloto_automatico",
+                label: "Piloto Automático Estriatal e Fachada Funcional (Yin & Knowlton)",
+                desc: "Manutenção mecânica de obrigações externas e aparência de normalidade enquanto a iniciativa autoral trava.",
+                color: "bg-indigo-600"
+            },
+            {
+                id: "embotamento_insula",
+                label: "Anestesia Interoceptiva e Desconexão Somática (vlPAG / Ínsula Anterior)",
+                desc: "Sensação de estar atrás de um vidro, amortecimento de necessidades fisiológicas e fuga em estímulos passivos.",
+                color: "bg-amber-600"
+            },
+            {
+                id: "clausura_existencial",
+                label: "Clausura Silenciosa e Bloqueio do Conatus (Kierkegaard / Levine)",
+                desc: "Encerramento interior atrás da aparência normal, vida em modo de espera e bloqueio da potência vital.",
+                color: "bg-rose-600"
+            }
+        ],
+        items: [
+            { id: 1, text: "Sinto meu corpo pesado e travado na cadeira ou no sofá, mesmo enquanto minha mente corre acelerada listando tudo o que eu deveria estar fazendo.", domain: "coativacao_polivagal", domainLabel: "Co-Ativação Polivagal", reverse: false },
+            { id: 2, text: "É como se eu estivesse pisando no acelerador e no freio ao mesmo tempo: sinto tensão na mandíbula, ombros ou estômago, mas não consigo gerar impulso para agir.", domain: "coativacao_polivagal", domainLabel: "Co-Ativação Polivagal", reverse: false },
+            { id: 3, text: "Quando tento me cobrar disciplina mais dura ou criar metas rígidas para sair da inércia, percebo que paraliso ainda mais em vez de ganhar energia.", domain: "coativacao_polivagal", domainLabel: "Co-Ativação Polivagal", reverse: false },
+            { id: 4, text: "Mesmo após dormir oito ou mais horas, acordo com uma fadiga opaca e densa que não melhora com descanso comum nem com café.", domain: "coativacao_polivagal", domainLabel: "Co-Ativação Polivagal", reverse: false },
+            { id: 5, text: "Pequenos imprevistos ou novas demandas simples despertam em mim uma vontade súbita de 'desligar' ou sumir por dentro para não ter que lidar com mais nada.", domain: "coativacao_polivagal", domainLabel: "Co-Ativação Polivagal", reverse: false },
+
+            { id: 6, text: "Para quem olha de fora, minha vida parece organizada e produtiva, mas sinto que estou apenas cumprindo roteiros mínimos no piloto automático.", domain: "piloto_automatico", domainLabel: "Piloto Estriatal", reverse: false },
+            { id: 7, text: "Consigo entregar o trabalho obrigatório por pressão externa ou hábito, mas travo completamente diante de projetos pessoais, decisões de carreira ou cuidados próprios.", domain: "piloto_automatico", domainLabel: "Piloto Estriatal", reverse: false },
+            { id: 8, text: "Muitas vezes respondo mensagens profissionais rápido por reflexo, mas deixo mensagens de amigos ou familiares sem resposta por dias porque exigem presença emocional real.", domain: "piloto_automatico", domainLabel: "Piloto Estriatal", reverse: false },
+            { id: 9, text: "Como ainda dou conta das contas e do emprego, sinto vergonha de admitir minha exaustão e acabo me chamando de preguiçoso(a) em silêncio.", domain: "piloto_automatico", domainLabel: "Piloto Estriatal", reverse: false },
+            { id: 10, text: "Ao fim de semanas inteiras de 'alta funcionalidade', percebo que não me lembro de ter sentido entusiasmo genuíno ou presença viva em quase nenhum momento.", domain: "piloto_automatico", domainLabel: "Piloto Estriatal", reverse: false },
+
+            { id: 11, text: "Tenho a impressão frequente de observar minha rotina por trás de uma placa de vidro, com certo entorpecimento entre o que acontece e o que eu sinto.", domain: "embotamento_insula", domainLabel: "Anestesia / vlPAG", reverse: false },
+            { id: 12, text: "Passo horas ignorando sinais básicos do corpo (sede, fome, vontade de ir ao banheiro, dor postural) sem notar, até que fiquem extremos.", domain: "embotamento_insula", domainLabel: "Anestesia / vlPAG", reverse: false },
+            { id: 13, text: "No tempo livre, fico preso(a) em rolagem passiva de vídeos curtos ou séries por horas — não por prazer real, mas como anestesia para não sentir o peso do dia.", domain: "embotamento_insula", domainLabel: "Anestesia / vlPAG", reverse: false },
+            { id: 14, text: "Tanto eventos muito ruins quanto boas notícias parecem bater em uma camada de algodão dentro de mim, sem gerar grande alegria nem grande choro.", domain: "embotamento_insula", domainLabel: "Anestesia / vlPAG", reverse: false },
+            { id: 15, text: "Sinto dificuldade física até para começar atividades simples de autocuidado que sei que me fariam bem (tomar banho, cozinhar, sair para caminhar).", domain: "embotamento_insula", domainLabel: "Anestesia / vlPAG", reverse: false },
+
+            { id: 16, text: "Evito conversar abertamente com pessoas próximas sobre o quanto estou travado(a) por dentro, mantendo uma fachada serena e competente para não preocupar nem parecer frágil.", domain: "clausura_existencial", domainLabel: "Clausura / Conatus", reverse: false },
+            { id: 17, text: "Sinto que minha vida está em 'modo de espera' ou sobrevivência provisória — apenas atravessando uma semana após a outra até que algo externo mude.", domain: "clausura_existencial", domainLabel: "Clausura / Conatus", reverse: false },
+            { id: 18, text: "O pensamento de começar algo novo, espontâneo ou criativo me provoca menos curiosidade e mais sensação imediata de peso intransponível.", domain: "clausura_existencial", domainLabel: "Clausura / Conatus", reverse: false },
+            { id: 19, text: "Mesmo quando tenho um dia totalmente livre sem cobranças, não consigo relaxar de fato nem usar o tempo para algo que me faça sentir vivo(a).", domain: "clausura_existencial", domainLabel: "Clausura / Conatus", reverse: false },
+            { id: 20, text: "Tenho a sensação de que gastei tanta energia sustentando minha funcionalidade aparente que não sobrou quase nada para habitar minha própria existência.", domain: "clausura_existencial", domainLabel: "Clausura / Conatus", reverse: false }
+        ],
+        cutoffs: [
+            {
+                max: 35,
+                label: "Regulação Autonômica Fluida / Conatus Preservado",
+                badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-300",
+                summary: "Alterna entre mobilização executiva e repouso reparador sem recorrer ao congelamento funcional nem à anestesia interoceptiva crônica."
+            },
+            {
+                max: 52,
+                label: "Desgaste Mascarado Inicial / Sinais de Co-Ativação Pontual",
+                badgeClass: "bg-yellow-100 text-yellow-800 border-yellow-300",
+                summary: "Sob períodos de alta demanda, o organismo combina urgência simpática com micro-freios dorsais, mantendo entregas mínimas à custa de cansaço opaco."
+            },
+            {
+                max: 68,
+                label: "Congelamento Funcional Elevado / Piloto Automático Estriatal",
+                badgeClass: "bg-orange-100 text-orange-800 border-orange-300",
+                summary: "O Estriado Dorsolateral sustenta obrigações mínimas no automático enquanto a vlPAG e o complexo vagal dorsal amortecem a interocepção, bloqueando a iniciativa pré-frontal."
+            },
+            {
+                max: 80,
+                label: "Congelamento Funcional Crônico / Clausura Autonômica e Bloqueio do Conatus",
+                badgeClass: "bg-red-100 text-red-800 border-red-300",
+                summary: "A co-ativação entre alerta simpático e imobilização dorsal tornou-se basal: há desconexão somática severa e aprisionamento da potência de agir. Recomenda-se abordagem somática, polivagal e ACT."
+            }
+        ],
+        references: [
+            "Dana, D. (2020). <em>A Teoria Polivagal na Terapia: Envolvendo o Ritmo da Regulação</em>. nVersos.",
+            "Kozlowska, K., Walker, P., McLean, L., & Carrive, P. (2015). Fear and the defense cascade: clinical implications and management. <em>Harvard Review of Psychiatry</em>, 23(4), 263-287.",
+            "Levine, P. A. (2012). <em>Uma Voz Sem Palavras: Como o Corpo Libera o Trauma e Restaura o Bem-Estar</em>. Summus.",
+            "Porges, S. W. (2012). <em>Teoria Polivagal: Fundamentos Neurofisiológicos das Emoções, Apego, Comunicação e Autorregulação</em>. Senses.",
+            "Yin, H. H., & Knowlton, B. J. (2006). The role of the basal ganglia in habit formation. <em>Nature Reviews Neuroscience</em>, 7(6), 464-476."
+        ]
+    },
+    {
         id: "EMRP_AS",
         code: "T-62",
         shortTitle: "EMRP-AS (Ruminação Pós-Evento)",

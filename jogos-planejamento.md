@@ -68,6 +68,7 @@ Este arquivo serve como fila de produção e controle para a criação automatiz
 | **Dia 59** | **Matriz de Compromisso Decisório e Desarme do Arrependimento** | Critérios Suficientes (Satisficing/Schwartz), Simulação Contrafactual (OFC/Coricelli), Aceitação da Renúncia (Kierkegaard/Sartre) e Amor Fati (Nietzsche) | `jogos/jogo-compromisso-decisorio-desarme-arrependimento.html` | ✅ **Publicado** |
 | **Dia 60** | **Matriz de Tolerância ao Silêncio e Atenção Contemplativa** | Comutação Ínsula Anterior (CEN–DMN), Desmame de Hipernovidade (Estriado/Wilson), Tédio Fértil e Vita Contemplativa (Pascal, Heidegger, Han) | `jogos/jogo-tolerancia-silencio-atencao-contemplativa.html` | ✅ **Publicado** |
 | **Dia 61** | **Matriz de Encerramento Pós-Evento e Esquecimento Ativo** | Perspectiva de Campo vs. Observador (Clark & Wells), Reconsolidação Mnêmica (Nader), Regulação Contrafactual (OFC/dACC) e Esquecimento Ativo (Nietzsche/Sartre) | `jogos/jogo-encerramento-pos-evento-esquecimento-ativo.html` | ✅ **Publicado** |
+| **Dia 62** | **Matriz de Descongelamento Somático e Agência Titulada** | Co-Ativação Polivagal (Porges/Dana), Cascata Defensiva (vlPAG/Kozlowska), Piloto Automático Estriatal (Yin & Knowlton), Titulação Somática (Levine) e Conatus (Spinoza) | `jogos/jogo-descongelamento-somatico-agencia-titulada.html` | ✅ **Publicado** |
 
 ---
 
